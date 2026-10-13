@@ -115,6 +115,26 @@ body.ver-comparar .bmc, body.ver-comparar .detalle, body.ver-comparar .pista{dis
 .form{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:6px}
 .form b{font-family:var(--f-display);font-size:18px}
 .form a{color:var(--sueno);font-weight:700}
+.sep{flex:1}
+.tabs .editar{border-color:var(--sueno);color:var(--sueno)}
+.tabs .editar[aria-pressed="true"]{background:var(--sueno);color:#fff}
+.tabs .guardar{background:var(--verde);border-color:var(--verde);color:#fff}
+.tabs .ligero{border-color:transparent;background:transparent;color:var(--muted);text-decoration:underline}
+.aviso{font-size:15px;color:var(--muted);margin-top:8px}
+.aviso[data-tipo="ok"]{color:var(--verde)}
+.aviso[data-tipo="error"]{color:var(--rojo);font-weight:700}
+.cell.edit{cursor:default}
+.cell.edit:hover{transform:none;box-shadow:none}
+textarea,select{width:100%;font:16px/1.4 var(--f-body);color:var(--ink);background:#fff;border:2px solid var(--line);border-radius:12px;padding:8px 10px;resize:vertical}
+textarea:focus,select:focus{outline:none;border-color:var(--sueno)}
+.detalle .fila{display:flex;gap:10px;align-items:center;margin-top:10px;max-width:420px}
+.detalle label b{display:block;margin-bottom:4px}
+body.editando .bmc{--tono:var(--sueno)}
+.enlace{width:100%;font:13px var(--f-mono);color:var(--muted);background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-top:4px}
+.acciones{display:flex;gap:12px;align-items:center;margin-top:4px}
+.copiar{font:700 15px var(--f-body);padding:8px 14px;border-radius:999px;border:0;background:var(--sueno);color:#fff;cursor:pointer}
+.boton{display:inline-block;font-weight:700;color:#fff;background:var(--magenta);padding:12px 20px;border-radius:999px;text-decoration:none}
+.boton:hover{filter:brightness(1.08)}
 footer{margin-top:48px;font-size:15px;color:var(--muted)}
 
 @media (max-width:900px){
@@ -163,9 +183,14 @@ footer{margin-top:48px;font-size:15px;color:var(--muted)}
     <button type="button" id="b-actual" data-v="actual" aria-pressed="false">Canvas actual</button>
     <button type="button" id="b-sueno" class="s" data-v="sueno" aria-pressed="true">Canvas soñado</button>
     <button type="button" id="b-comparar" data-v="comparar" aria-pressed="false">Comparar</button>
+    <span class="sep"></span>
+    <button type="button" id="b-editar" class="editar" aria-pressed="false">Editar canvas</button>
+    <button type="button" id="b-guardar" class="guardar" hidden>Guardar para todos</button>
+    <button type="button" id="b-recargar" class="ligero">Ver la última versión</button>
   </div>
+  <p class="aviso" id="aviso" role="status">Cargando…</p>
   <div class="bmc" id="bmc" data-modo="sueno"></div>
-  <p class="pista">Toca una casilla para ver el detalle, la hipótesis y cómo se prueba.</p>
+  <p class="pista">Toca una casilla para ver el detalle, la hipótesis y cómo se prueba. Con <b>Editar canvas</b> cualquiera con este link puede cambiar las casillas, "lo que creemos" y el IUP snippet; los cambios quedan para todos al tocar <b>Guardar para todos</b>.</p>
   <div class="detalle" id="detalle" aria-live="polite"></div>
   <div class="comparar" id="comparar"></div>
 </section>
@@ -190,6 +215,7 @@ footer{margin-top:48px;font-size:15px;color:var(--muted)}
 
 <section aria-labelledby="t-met">
   <h2 id="t-met">Cómo entra cada método</h2>
+  <p style="margin-top:8px"><a class="boton" href="metodos.html">Leer los 5 métodos explicados paso a paso →</a></p>
   <div class="metodos">
     <div class="met principal" style="--c:var(--magenta)"><b>Lean LaunchPad 2026 · método principal</b><p>Se modela el canvas completo, cada casilla queda como supuesto y se prueba con IUP snippets. Las entrevistas reales mandan; con las primeras se crean 5 personajes de IA que dan la visión de consenso y nuevas preguntas. La validación final es el compromiso: empresas y estudiantes que ponen tiempo, datos o dinero (design partners).</p></div>
     <div class="met" style="--c:var(--azul)"><b>Value Lab</b><p>Desafiar paradigmas: la creencia común es que Achievers es una clase; la teoría por probar es que puede ser una academia que conecta talento con empresas, sin alterar lo que ya funciona.</p></div>
@@ -201,7 +227,7 @@ footer{margin-top:48px;font-size:15px;color:var(--muted)}
 
 <section aria-labelledby="t-forms">
   <h2 id="t-forms">Las 5 encuestas</h2>
-  <p class="muted" style="margin-top:6px;max-width:68ch">Una por segmento. Cada una dice su objetivo y las hipótesis que prueba, pide consentimiento y termina con una pregunta de compromiso.</p>
+  <p class="muted" style="margin-top:6px;max-width:68ch">Una por segmento. Cada una dice su objetivo y las hipótesis que prueba, pide consentimiento y termina con una pregunta de compromiso. Copia el enlace y compártelo.</p>
   <div class="forms" id="forms"></div>
 </section>
 
@@ -209,41 +235,45 @@ footer{margin-top:48px;font-size:15px;color:var(--muted)}
 </div>
 
 <script>
-var BMC = {
+var API = "https://script.google.com/macros/s/AKfycbyMtIoufDy2osThFdSVegiXOtbD3QIa15aEnqPC0pG9gqZPSk8s31mkdM6Xd6HVcE5O1Q/exec";
+// Contenido inicial. Lo que la gente guarda vive en el Apps Script y reemplaza esto casilla por casilla.
+// Marcas dentro del texto: [NUEVO], [RETO 1], [RETO 2].
+var BASE = {
   actual: {
-    socios:{t:"Socios clave",i:["Universidad de los Andes (la clase)","Empresas aliadas que traen retos","Invitados del podcast"]},
-    actividades:{t:"Actividades clave",i:["Conseguir empresas y retos","Dictar la clase con el método","Acompañar a los equipos","Las 3 sesiones con cada empresa"]},
-    recursos:{t:"Recursos clave",i:["El método de innovación","El equipo de Achievers","La relación con la universidad","Red de contactos y podcast"]},
-    propuesta:{t:"Propuesta de valor",i:["Empresas: un reto real resuelto con método, con solo 3 sesiones de su tiempo","Estudiantes: aprender innovación haciendo un reto real con una empresa"]},
-    relaciones:{t:"Relaciones",i:["Uno a uno con cada empresa","Acompañamiento en clase"]},
-    canales:{t:"Canales",i:["Contactos del equipo (venta directa)","LinkedIn y página web","Oferta de electivas de la universidad","Instagram"]},
-    segmentos:{t:"Segmentos",i:["Empresas con área de innovación o talento","Estudiantes de la universidad inscritos en la clase"]},
-    costos:{t:"Estructura de costos",i:["Tiempo del equipo","Venta uno a uno a cada empresa","Contenido y redes","Eventos y sesiones"]},
-    ingresos:{t:"Fuentes de ingreso",i:["Empresas: pago por el JAM Lite (3 sesiones)","Precio por confirmar con Achievers"]}
+    socios:["Universidad de los Andes (la clase)","Empresas aliadas que traen retos","Invitados del podcast"],
+    actividades:["Conseguir empresas y retos","Dictar la clase con el método","Acompañar a los equipos","Las 3 sesiones con cada empresa"],
+    recursos:["El método de innovación","El equipo de Achievers","La relación con la universidad","Red de contactos y podcast"],
+    propuesta:["Empresas: un reto real resuelto con método, con solo 3 sesiones de su tiempo","Estudiantes: aprender innovación haciendo un reto real con una empresa"],
+    relaciones:["Uno a uno con cada empresa","Acompañamiento en clase"],
+    canales:["Contactos del equipo (venta directa)","LinkedIn y página web","Oferta de electivas de la universidad","Instagram"],
+    segmentos:["Empresas con área de innovación o talento","Estudiantes de la universidad inscritos en la clase"],
+    costos:["Tiempo del equipo","Venta uno a uno a cada empresa","Contenido y redes","Eventos y sesiones"],
+    ingresos:["Empresas: pago por el JAM Lite (3 sesiones)","Precio por confirmar con Achievers"]
   },
   sueno: {
-    socios:{t:"Socios clave",i:["Universidades aliadas","Empresas que traen retos y contratan","Plataforma de cursos y pagos","Monitores (estudiantes avanzados)","Invitados del podcast"],n:[0,2,3]},
-    actividades:{t:"Actividades clave",i:["Grabar los videos del método","Operar la academia automática","Monitorías semanales","Clase presencial","Conseguir retos y conectar talento con empresas","Producir redes y podcast"],n:[0,1,2,4,5],r:{5:1}},
-    recursos:{t:"Recursos clave",i:["Academia virtual automatizada","Videos y quizzes del método","Monitores y profesores","Red de empresas","Marca, redes y podcast"],n:[0,1,4],r:{4:1}},
-    propuesta:{t:"Propuesta de valor",i:["Estudiantes: aprender el método al nivel que puedas pagar, de 100 % virtual a retos reales","Retos con empresas que te pueden contratar","Empresas: retos resueltos y candidatos que ya vieron trabajar","Trabajadores: aprender el método en retos junto a estudiantes"],n:[0,1,2,3]},
-    relaciones:{t:"Relaciones",i:["Autoservicio: entras y pagas sin registro manual","Comunidad y monitor","Presencial en la clase","Empresas: acompañamiento en 3 sesiones"],n:[0,1]},
-    canales:{t:"Canales",i:["Instagram con anuncios","Videos de los retos","Podcast semanal o mensual","LinkedIn","Promoción en universidades","La academia en la web"],n:[0,1,2,4,5],r:{0:1,1:1,2:1,3:1}},
-    segmentos:{t:"Segmentos",i:["Estudiantes de cualquier carrera y universidad","Recién graduados","Empresas que buscan resolver retos y talento","Trabajadores de empresas","Universidades aliadas"],n:[0,1,3,4]},
-    costos:{t:"Estructura de costos",i:["Producción de videos","Plataforma y automatización","Anuncios en redes","Monitores y profesores","Espacio presencial"],n:[0,1,2,3],r:{2:2}},
-    ingresos:{t:"Fuentes de ingreso",i:["Pago por nivel de la academia (1 < 2 < 3 < 4)","Estudiantes que pagan por participar en retos","Empresas: JAM Lite por reto","Posible pago por contratación","Patrocinio del podcast"],n:[0,1,3,4],r:{0:2,1:2,2:2,3:2,4:2}}
+    socios:["Universidades aliadas [NUEVO]","Empresas que traen retos y contratan","Plataforma de cursos y pagos [NUEVO]","Monitores (estudiantes avanzados) [NUEVO]","Invitados del podcast"],
+    actividades:["Grabar los videos del método [NUEVO]","Operar la academia automática [NUEVO]","Monitorías semanales [NUEVO]","Clase presencial","Conseguir retos y conectar talento con empresas [NUEVO]","Producir redes y podcast [NUEVO] [RETO 1]"],
+    recursos:["Academia virtual automatizada [NUEVO]","Videos y quizzes del método [NUEVO]","Monitores y profesores","Red de empresas","Marca, redes y podcast [NUEVO] [RETO 1]"],
+    propuesta:["Estudiantes: aprender el método al nivel que puedas pagar, de 100 % virtual a retos reales [NUEVO]","Retos con empresas que te pueden contratar [NUEVO]","Empresas: retos resueltos y candidatos que ya vieron trabajar [NUEVO]","Trabajadores: aprender el método en retos junto a estudiantes [NUEVO]"],
+    relaciones:["Autoservicio: entras y pagas sin registro manual [NUEVO]","Comunidad y monitor [NUEVO]","Presencial en la clase","Empresas: acompañamiento en 3 sesiones"],
+    canales:["Instagram con anuncios [NUEVO] [RETO 1]","Videos de los retos [NUEVO] [RETO 1]","Podcast semanal o mensual [NUEVO] [RETO 1]","LinkedIn [RETO 1]","Promoción en universidades [NUEVO]","La academia en la web [NUEVO]"],
+    segmentos:["Estudiantes de cualquier carrera y universidad [NUEVO]","Recién graduados [NUEVO]","Empresas que buscan resolver retos y talento","Trabajadores de empresas [NUEVO]","Universidades aliadas [NUEVO]"],
+    costos:["Producción de videos [NUEVO]","Plataforma y automatización [NUEVO]","Anuncios en redes [NUEVO] [RETO 2]","Monitores y profesores [NUEVO]","Espacio presencial"],
+    ingresos:["Pago por nivel de la academia (1 < 2 < 3 < 4) [NUEVO] [RETO 2]","Estudiantes que pagan por participar en retos [NUEVO] [RETO 2]","Empresas: JAM Lite por reto [RETO 2]","Posible pago por contratación [NUEVO] [RETO 2]","Patrocinio del podcast [NUEVO] [RETO 2]"]
+  },
+  detalle: {
+    socios:{h:"H8",por:"Una universidad aliada que promocione la academia baja el costo de conseguir estudiantes.",snip:"One-pager para una universidad con la propuesta de alianza y un piloto gratis para su facultad."},
+    actividades:{h:"H9",por:"El equipo puede producir videos y operar una academia automática sin alterar lo que ya funciona.",snip:"Grabar 1 lección de 5 minutos y medir cuánto tiempo y costo toma."},
+    recursos:{h:"H7",por:"Una academia sin registro manual funciona: la gente se inscribe y paga sola.",snip:"Página de inscripción con pago de prueba (sin cobrar) y medir cuántos llegan al final."},
+    propuesta:{h:"H1 · H2 · H3",por:"Los estudiantes pagan por aprender el método, más si hay un monitor, y mucho más si hay retos con empresas que los pueden contratar.",snip:"Landing con los 4 niveles y sus precios; botón \"Quiero este nivel\" que mide cuál eligen."},
+    relaciones:{h:"H2",por:"Una reunión semanal con un monitor hace que la gente pase del nivel 1 al 2.",snip:"Ofrecer una monitoría de prueba de 20 minutos y medir cuántos la agendan."},
+    canales:{h:"H6",por:"Las redes, los videos de los retos y el podcast traen inscripciones a menor costo que la venta uno a uno.",snip:"Dos anuncios en Instagram (caso real contra mensaje institucional) con enlace a la lista de espera."},
+    segmentos:{h:"H1 · H4 · H5",por:"Estudiantes de cualquier carrera, empresas y trabajadores quieren lo que ofrece la academia.",snip:"Las 5 encuestas, una por segmento, cada una con una pregunta de compromiso."},
+    costos:{h:"H9",por:"Los costos de videos, plataforma, anuncios y monitores caben dentro de lo que pagan los niveles.",snip:"Hoja de costos por nivel con los datos reales de Achievers y el punto de equilibrio."},
+    ingresos:{h:"H3 · H4 · H8",por:"Los estudiantes pagan por nivel y por retos; las empresas pagan el JAM Lite y, quizá, por contratar.",snip:"Preventa del nivel 1 a precio de lanzamiento y one-pager para empresas con el reto como proceso de selección."}
   }
 };
-var DETALLE = {
-  socios:{h:"H8",por:"Una universidad aliada que promocione la academia baja el costo de conseguir estudiantes.",snip:"One-pager para una universidad con la propuesta de alianza y un piloto gratis para su facultad."},
-  actividades:{h:"H9",por:"El equipo puede producir videos y operar una academia automática sin alterar lo que ya funciona.",snip:"Grabar 1 lección de 5 minutos y medir cuánto tiempo y costo toma."},
-  recursos:{h:"H7",por:"Una academia sin registro manual funciona: la gente se inscribe y paga sola.",snip:"Página de inscripción con pago de prueba (sin cobrar) y medir cuántos llegan al final."},
-  propuesta:{h:"H1 · H2 · H3",por:"Los estudiantes pagan por aprender el método, más si hay un monitor, y mucho más si hay retos con empresas que los pueden contratar.",snip:"Landing con los 4 niveles y sus precios; botón \"Quiero este nivel\" que mide cuál eligen."},
-  relaciones:{h:"H2",por:"Una reunión semanal con un monitor hace que la gente pase del nivel 1 al 2.",snip:"Ofrecer una monitoría de prueba de 20 minutos y medir cuántos la agendan."},
-  canales:{h:"H6",por:"Las redes, los videos de los retos y el podcast traen inscripciones a menor costo que la venta uno a uno.",snip:"Dos anuncios en Instagram (caso real contra mensaje institucional) con enlace a la lista de espera."},
-  segmentos:{h:"H1 · H4 · H5",por:"Estudiantes de cualquier carrera, empresas y trabajadores quieren lo que ofrece la academia.",snip:"Las 5 encuestas, una por segmento, cada una con una pregunta de compromiso."},
-  costos:{h:"H9",por:"Los costos de videos, plataforma, anuncios y monitores caben dentro de lo que pagan los niveles.",snip:"Hoja de costos por nivel con los datos reales de Achievers y el punto de equilibrio."},
-  ingresos:{h:"H3 · H4 · H8",por:"Los estudiantes pagan por nivel y por retos; las empresas pagan el JAM Lite y, quizá, por contratar.",snip:"Preventa del nivel 1 a precio de lanzamiento y one-pager para empresas con el reto como proceso de selección."}
-};
+var TITULOS={socios:"Socios clave",actividades:"Actividades clave",recursos:"Recursos clave",propuesta:"Propuesta de valor",relaciones:"Relaciones",canales:"Canales",segmentos:"Segmentos",costos:"Estructura de costos",ingresos:"Fuentes de ingreso"};
 var ORDEN=["socios","actividades","recursos","propuesta","relaciones","canales","segmentos","costos","ingresos"];
 var HIPS=[
   {id:"H1",t:"Estudiantes de cualquier carrera pagarían por el nivel 1 virtual.",c:"Propuesta · Ingresos",f:"F1 · F5",s:"Landing con precio y botón de preventa; se mide cuántos pagan o dejan su correo."},
@@ -257,57 +287,117 @@ var HIPS=[
   {id:"H9",t:"El equipo puede operar la academia sin alterar lo que ya está establecido, y los números cierran.",c:"Actividades · Costos · Reto 2",f:"F4",s:"Hoja de costos por nivel y piloto de 1 lección grabada."},
   {id:"H10",t:"Los estudiantes entran por créditos o curiosidad y se quedan por la experiencia con empresas reales.",c:"Propuesta",f:"F5",s:"Encuesta a estudiantes actuales y pasados, más 5 entrevistas."}
 ];
-var COMP={
-  segmentos:["Empresas y estudiantes inscritos en la clase","Estudiantes de cualquier carrera y universidad, graduados, empresas, trabajadores y universidades"],
-  propuesta:["Un reto resuelto en 3 sesiones","Una academia por niveles que termina en retos y contratación"],
-  canales:["Contactos del equipo, LinkedIn, web y la universidad","Instagram con anuncios, videos de retos, podcast, universidades y la academia en la web"],
-  relaciones:["Uno a uno","Autoservicio automático, monitor, presencial y empresas acompañadas"],
-  ingresos:["Pago de la empresa por el JAM Lite","Pago por nivel, pago por participar en retos, JAM Lite, posible pago por contratación y patrocinios"],
-  recursos:["Método, equipo, universidad y red","Academia virtual, videos, monitores, red de empresas, marca y podcast"],
-  actividades:["Vender, dictar la clase y acompañar","Grabar, operar la academia, monitorías, conectar talento y producir redes"],
-  socios:["Universidad y empresas aliadas","Universidades aliadas, empresas que contratan, plataforma y monitores"],
-  costos:["Tiempo del equipo y venta uno a uno","Videos, plataforma, anuncios, monitores y espacio"]
-};
 var FORMS=[
-  {id:"F1",t:"Estudiantes que podrían inscribirse",d:"Cualquier carrera y universidad, sin inscribirse aún."},
-  {id:"F2",t:"Trabajadores de empresas",d:"Empleados que podrían participar en los retos."},
-  {id:"F3",t:"Empresas",d:"CEO, líderes de innovación o de talento."},
-  {id:"F4",t:"Equipo de Achievers Lab",d:"Cómo funciona hoy y qué no se puede cambiar."},
-  {id:"F5",t:"Estudiantes actuales y pasados",d:"Por qué entraron, qué cambió y por qué siguen."}
+  {id:"F1",t:"Estudiantes que podrían inscribirse",d:"Cualquier carrera y universidad, sin inscribirse aún.",u:"https://docs.google.com/forms/d/e/1FAIpQLSeu_0vv4qRsLqFizge-bEuetcyWtGNJ82KTuzlL98TmeVsjGg/viewform"},
+  {id:"F2",t:"Trabajadores de empresas",d:"Empleados que podrían participar en los retos.",u:"https://docs.google.com/forms/d/e/1FAIpQLSe4eBWo4tSPxD5hHuKpQTy2GUIvkO3F1dqaSZi9H5-7aeLa4w/viewform"},
+  {id:"F3",t:"Empresas",d:"CEO, líderes de innovación o de talento.",u:"https://docs.google.com/forms/d/e/1FAIpQLScWjk6XXau-4yNF2jF1qVBttPmwb-SVDkktCXlW-Q7FquyPCQ/viewform"},
+  {id:"F4",t:"Equipo de Achievers Lab",d:"Cómo funciona hoy y qué no se puede cambiar.",u:"https://docs.google.com/forms/d/e/1FAIpQLSdbpEECqhCWJy_0s36xJHI7RNAL57KeY4eeMnUP9Gd7f0O27A/viewform"},
+  {id:"F5",t:"Estudiantes actuales y pasados",d:"Por qué entraron, qué cambió y por qué siguen.",u:"https://docs.google.com/forms/d/e/1FAIpQLSd5f35R8AJfklGoljy6uRipTz0nGWtFKCEzZ3iB1qHeyZxSEg/viewform"}
 ];
-var LINKS = window.LINKS_FORMS || {};
 
-var vista="sueno", abierta="propuesta";
+var estado = JSON.parse(JSON.stringify(BASE));
+var vista="sueno", abierta="propuesta", editando=false, guardadoEn=null, sucio=false;
+
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
-function pintar(){
-  var b=document.getElementById("bmc"); b.dataset.modo=vista==="comparar"?"sueno":vista;
-  var datos=BMC[vista==="comparar"?"sueno":vista];
-  b.innerHTML=ORDEN.map(function(k,ix){
-    var c=datos[k];
-    var lis=c.i.map(function(x,j){
-      var tag="";
-      if(vista==="sueno"&&c.n&&c.n.indexOf(j)>=0) tag+='<span class="nuevo">NUEVO</span>';
-      if(vista==="sueno"&&c.r&&c.r[j]) tag+='<span class="reto'+c.r[j]+'">RETO '+c.r[j]+'</span>';
-      return "<li>"+esc(x)+tag+"</li>";}).join("");
-    return '<button type="button" class="cell '+k+'" id="c-'+k+'" data-k="'+k+'" aria-expanded="'+(k===abierta)+'"><h3><i>'+(ix+1)+'</i>'+esc(c.t)+'</h3><ul>'+lis+'</ul>'+(vista==="sueno"?'<span class="h">'+DETALLE[k].h+'</span>':'')+'</button>';
-  }).join("");
-  b.querySelectorAll(".cell").forEach(function(el){el.addEventListener("click",function(){abierta=el.dataset.k;pintar();
-    if(window.innerWidth<900) document.getElementById("detalle").scrollIntoView({block:"nearest"});});});
-  var c=datos[abierta], d=DETALLE[abierta], det=document.getElementById("detalle");
-  det.style.setProperty("--tono", vista==="actual"?"var(--actual)":"var(--sueno)");
-  if(vista==="actual"){
-    det.innerHTML='<span class="lab">Canvas actual · JAM Lite</span><h3>'+esc(c.t)+'</h3><div class="cols"><div><b>Hoy</b><ul>'+c.i.map(function(x){return"<li>"+esc(x)+"</li>";}).join("")+'</ul></div><div><b>En el canvas soñado</b><ul>'+BMC.sueno[abierta].i.map(function(x){return"<li>"+esc(x)+"</li>";}).join("")+'</ul></div></div>';
-  } else {
-    det.innerHTML='<span class="lab">Canvas soñado · '+esc(d.h)+'</span><h3>'+esc(c.t)+'</h3><div class="cols"><div><b>Lo que creemos</b><p>'+esc(d.por)+'</p></div><div><b>IUP snippet para probarlo</b><p>'+esc(d.snip)+'</p></div></div>';
-  }
-  document.getElementById("comparar").innerHTML='<table><thead><tr><th>Casilla</th><th>Hoy (JAM Lite)</th><th>Soñado (Academia)</th></tr></thead><tbody>'+ORDEN.map(function(k){return"<tr><td>"+esc(BMC.sueno[k].t)+"</td><td>"+esc(COMP[k][0])+"</td><td>"+esc(COMP[k][1])+"</td></tr>";}).join("")+"</tbody></table>";
-  document.body.classList.toggle("ver-comparar",vista==="comparar");
-  document.querySelectorAll(".tabs button").forEach(function(x){x.setAttribute("aria-pressed",x.dataset.v===vista?"true":"false");});
+function conMarcas(txt){
+  return esc(txt).replace(/\[NUEVO\]/g,'<span class="nuevo">NUEVO</span>').replace(/\[RETO ([12])\]/g,'<span class="reto$1">RETO $1</span>');
 }
-document.querySelectorAll(".tabs button").forEach(function(x){x.addEventListener("click",function(){vista=x.dataset.v;pintar();});});
+function sinMarcas(txt){return txt.replace(/\s*\[(NUEVO|RETO [12])\]/g,"");}
+function aviso(txt,tipo){var a=document.getElementById("aviso");a.textContent=txt;a.dataset.tipo=tipo||"";}
+function hora(iso){try{return new Date(iso).toLocaleString("es-CO",{dateStyle:"medium",timeStyle:"short"});}catch(e){return iso;}}
+
+function mezclar(remoto){
+  ["actual","sueno"].forEach(function(v){ if(remoto&&remoto[v]) ORDEN.forEach(function(k){ if(Array.isArray(remoto[v][k])) estado[v][k]=remoto[v][k]; }); });
+  if(remoto&&remoto.detalle) ORDEN.forEach(function(k){ var d=remoto.detalle[k]; if(d&&typeof d==="object") estado.detalle[k]={h:d.h||BASE.detalle[k].h,por:String(d.por||""),snip:String(d.snip||"")}; });
+  guardadoEn = remoto && remoto.t;
+}
+function cargar(){
+  aviso("Cargando la última versión…");
+  return fetch(API,{cache:"no-store"}).then(function(r){return r.json();}).then(function(j){
+    mezclar(j); sucio=false; pintar();
+    aviso(guardadoEn?"Última edición guardada: "+hora(guardadoEn):"Versión inicial. Cualquiera con el link puede editarla.","ok");
+  }).catch(function(){ pintar(); aviso("No se pudo cargar la versión compartida; se muestra la inicial.","error"); });
+}
+function guardar(){
+  leerFormulario();
+  aviso("Guardando…");
+  document.getElementById("b-guardar").disabled=true;
+  fetch(API,{method:"POST",body:JSON.stringify({actual:estado.actual,sueno:estado.sueno,detalle:estado.detalle})})
+    .then(function(r){return r.json();}).then(function(j){
+      if(!j.ok) throw new Error(j.error||"error");
+      guardadoEn=j.t; sucio=false; aviso("Guardado para todos: "+hora(j.t),"ok");
+    }).catch(function(e){ aviso("No se pudo guardar: "+e.message+". Intenta de nuevo.","error"); })
+    .then(function(){document.getElementById("b-guardar").disabled=false;});
+}
+function leerFormulario(){
+  if(!editando) return;
+  var v = vista==="actual"?"actual":"sueno";
+  document.querySelectorAll("textarea[data-k]").forEach(function(t){
+    estado[v][t.dataset.k]=t.value.split("\n").map(function(x){return x.trim();}).filter(Boolean);
+  });
+  var por=document.getElementById("e-por"), snip=document.getElementById("e-snip");
+  if(por) estado.detalle[abierta].por=por.value.trim();
+  if(snip) estado.detalle[abierta].snip=snip.value.trim();
+}
+
+function pintar(){
+  var b=document.getElementById("bmc"); var v = vista==="actual"?"actual":"sueno";
+  b.dataset.modo=v;
+  b.innerHTML=ORDEN.map(function(k,ix){
+    var items=estado[v][k];
+    var cab='<h3><i>'+(ix+1)+'</i>'+TITULOS[k]+'</h3>';
+    if(editando){
+      return '<div class="cell edit '+k+'"><label for="t-'+k+'">'+cab+'</label><textarea id="t-'+k+'" data-k="'+k+'" rows="'+Math.max(3,items.length+1)+'">'+esc(items.join("\n"))+'</textarea><span class="h">Una idea por línea · marcas: [NUEVO] [RETO 1] [RETO 2]</span></div>';
+    }
+    var lis=items.map(function(x){return "<li>"+conMarcas(x)+"</li>";}).join("");
+    return '<button type="button" class="cell '+k+'" data-k="'+k+'" aria-expanded="'+(k===abierta)+'">'+cab+'<ul>'+lis+'</ul>'+(v==="sueno"?'<span class="h">'+esc(estado.detalle[k].h)+'</span>':'')+'</button>';
+  }).join("");
+  b.querySelectorAll("button.cell").forEach(function(el){el.addEventListener("click",function(){abierta=el.dataset.k;pintar();
+    if(window.innerWidth<900) document.getElementById("detalle").scrollIntoView({block:"nearest"});});});
+  b.querySelectorAll("textarea").forEach(function(t){t.addEventListener("input",function(){sucio=true;});});
+
+  var det=document.getElementById("detalle"), d=estado.detalle[abierta];
+  det.style.setProperty("--tono", v==="actual"?"var(--actual)":"var(--sueno)");
+  if(editando){
+    var opciones=ORDEN.map(function(k){return '<option value="'+k+'"'+(k===abierta?" selected":"")+'>'+TITULOS[k]+'</option>';}).join("");
+    det.innerHTML='<span class="lab">Hipótesis de la casilla · '+esc(d.h)+'</span>'+
+      '<div class="fila"><label for="e-casilla"><b>Casilla</b></label><select id="e-casilla">'+opciones+'</select></div>'+
+      '<div class="cols"><div><label for="e-por"><b>Lo que creemos</b></label><textarea id="e-por" rows="4">'+esc(d.por)+'</textarea></div>'+
+      '<div><label for="e-snip"><b>IUP snippet para probarlo</b></label><textarea id="e-snip" rows="4">'+esc(d.snip)+'</textarea></div></div>';
+    document.getElementById("e-casilla").addEventListener("change",function(e){leerFormulario();abierta=e.target.value;pintar();});
+    det.querySelectorAll("textarea").forEach(function(t){t.addEventListener("input",function(){sucio=true;});});
+  } else if(v==="actual"){
+    det.innerHTML='<span class="lab">Canvas actual · JAM Lite</span><h3>'+TITULOS[abierta]+'</h3><div class="cols"><div><b>Hoy</b><ul>'+estado.actual[abierta].map(function(x){return"<li>"+conMarcas(x)+"</li>";}).join("")+'</ul></div><div><b>En el canvas soñado</b><ul>'+estado.sueno[abierta].map(function(x){return"<li>"+conMarcas(x)+"</li>";}).join("")+'</ul></div></div>';
+  } else {
+    det.innerHTML='<span class="lab">Canvas soñado · '+esc(d.h)+'</span><h3>'+TITULOS[abierta]+'</h3><div class="cols"><div><b>Lo que creemos</b><p>'+esc(d.por)+'</p></div><div><b>IUP snippet para probarlo</b><p>'+esc(d.snip)+'</p></div></div>';
+  }
+  document.getElementById("comparar").innerHTML='<table><thead><tr><th>Casilla</th><th>Hoy (JAM Lite)</th><th>Soñado (Academia)</th></tr></thead><tbody>'+ORDEN.map(function(k){return"<tr><td>"+TITULOS[k]+"</td><td>"+esc(estado.actual[k].map(sinMarcas).join(" · "))+"</td><td>"+esc(estado.sueno[k].map(sinMarcas).join(" · "))+"</td></tr>";}).join("")+"</tbody></table>";
+  document.body.classList.toggle("ver-comparar",vista==="comparar");
+  document.body.classList.toggle("editando",editando);
+  document.querySelectorAll(".tabs button[data-v]").forEach(function(x){x.setAttribute("aria-pressed",x.dataset.v===vista?"true":"false");});
+  document.getElementById("b-editar").textContent=editando?"Terminar de editar":"Editar canvas";
+  document.getElementById("b-editar").setAttribute("aria-pressed",editando?"true":"false");
+  document.getElementById("b-guardar").hidden=!editando;
+  document.getElementById("b-editar").hidden=vista==="comparar";
+}
+document.querySelectorAll(".tabs button[data-v]").forEach(function(x){x.addEventListener("click",function(){leerFormulario();vista=x.dataset.v;if(vista==="comparar")editando=false;pintar();});});
+document.getElementById("b-editar").addEventListener("click",function(){leerFormulario();editando=!editando;pintar();
+  if(editando) aviso("Modo edición: cambia el texto y toca \"Guardar para todos\".");});
+document.getElementById("b-guardar").addEventListener("click",guardar);
+document.getElementById("b-recargar").addEventListener("click",function(){ if(sucio && !window.__confirmarRecarga){ window.__confirmarRecarga=true; aviso("Tienes cambios sin guardar. Toca \"Ver la última versión\" otra vez para descartarlos.","error"); return;} window.__confirmarRecarga=false; editando=false; cargar(); });
+window.addEventListener("beforeunload",function(e){ if(sucio){e.preventDefault();e.returnValue="";} });
+
 document.getElementById("hips").innerHTML=HIPS.map(function(h){return '<div class="hip"><div class="top"><span class="id">'+h.id+'</span><span class="chip" style="--c:var(--sueno)">'+esc(h.c)+'</span><span class="chip">Encuesta '+esc(h.f)+'</span></div><p>'+esc(h.t)+'</p><div class="snip"><b>IUP snippet</b>'+esc(h.s)+'</div></div>';}).join("");
-document.getElementById("forms").innerHTML=FORMS.map(function(f){var l=LINKS[f.id];return '<div class="form"><span class="lab">'+f.id+'</span><b>'+esc(f.t)+'</b><span class="muted">'+esc(f.d)+'</span>'+(l?'<a href="'+esc(l)+'" target="_blank" rel="noopener">Responder la encuesta →</a>':'<span class="muted">Enlace pronto</span>')+'</div>';}).join("");
+document.getElementById("forms").innerHTML=FORMS.map(function(f){return '<div class="form"><span class="lab">'+f.id+'</span><b>'+esc(f.t)+'</b><span class="muted">'+esc(f.d)+'</span>'+
+  '<input class="enlace" id="l-'+f.id+'" type="text" readonly value="'+esc(f.u)+'" aria-label="Enlace de la encuesta '+f.id+'">'+
+  '<div class="acciones"><button type="button" class="copiar" data-u="'+esc(f.u)+'" data-id="l-'+f.id+'">Copiar enlace</button><a href="'+esc(f.u)+'" target="_blank" rel="noopener">Abrir</a></div></div>';}).join("");
+document.querySelectorAll(".copiar").forEach(function(b){b.addEventListener("click",function(){
+  var u=b.dataset.u, inp=document.getElementById(b.dataset.id);
+  function ok(){b.textContent="¡Copiado!";setTimeout(function(){b.textContent="Copiar enlace";},1800);}
+  try{ navigator.clipboard.writeText(u).then(ok,function(){inp.select();b.textContent="Ctrl+C para copiar";}); }catch(e){ inp.select(); b.textContent="Ctrl+C para copiar"; }
+});});
 pintar();
+cargar();
 </script>
 </body>
 </html>

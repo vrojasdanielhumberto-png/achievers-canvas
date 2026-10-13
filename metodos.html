@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Métodos de innovación</title>
+<meta name="description" content="Resumen claro de Lean LaunchPad 2026 paso a paso y de Lean Startup, Innovator's Method, Value Lab e Innovator's DNA.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: guía de lectura. Arriba, Lean LaunchPad completo (qué es, qué cambia, qué se necesita, paso a paso por semana, glosario). Abajo, una ficha por cada uno de los otros 4 métodos. Solo modo claro. */
+:root{
+  color-scheme:light;
+  --bg:#F7F7FB; --card:#FFFFFF; --ink:#172033; --muted:#566079; --line:#DCE2EB; --soft:#F1F0F8;
+  --magenta:#B0156B; --naranja:#C9650F; --verde:#23804D; --azul:#2563C9; --dna:#4A5568; --violeta:#5B3DF5;
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:18px;line-height:1.55}
+.wrap{max-width:980px;margin:0 auto;padding-inline:20px;padding-block:24px 64px}
+h1,h2,h3{font-family:var(--f-display);margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1{font-size:clamp(34px,5.5vw,56px);font-weight:800;line-height:1.04}
+h2{font-size:clamp(26px,3.4vw,34px);font-weight:800;margin-top:44px}
+h3{font-size:21px;font-weight:800}
+p{margin:8px 0 0;max-width:70ch}
+a{color:var(--violeta);font-weight:700}
+.lab{font-family:var(--f-mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.volver{display:inline-block;margin-bottom:18px}
+nav.indice{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+nav.indice a{font-size:15px;padding:7px 14px;border-radius:999px;background:var(--card);border:2px solid var(--c);color:var(--c);text-decoration:none}
+.hero{margin-top:26px;background:var(--card);border-radius:26px;padding:26px;border-top:8px solid var(--magenta)}
+.hero .big{font-family:var(--f-display);font-size:clamp(24px,3.2vw,32px);font-weight:800;line-height:1.2;color:var(--magenta)}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.caja{background:var(--soft);border-radius:18px;padding:16px 18px;min-width:0}
+.caja h3{font-size:18px}
+.caja ul{margin:6px 0 0;padding-left:20px}
+.caja li{margin:4px 0}
+.antes{border-left:5px solid #9AA3B5}.ahora{border-left:5px solid var(--magenta)}
+.pasos{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:12px}
+.paso{display:grid;grid-template-columns:56px 1fr;gap:14px;background:var(--card);border-radius:20px;padding:18px;border:1px solid var(--line)}
+.paso .n{width:56px;height:56px;border-radius:16px;background:var(--magenta);color:#fff;font-family:var(--f-display);font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.05}
+.paso.fase2 .n{background:#7A0F4B}
+.paso.puerta .n{background:#B7791F}
+.paso ul{margin:6px 0 0;padding-left:20px}
+.paso li{margin:3px 0}
+.paso .sale{margin-top:8px;font-size:16px;color:var(--muted)}
+.paso .sale b{color:var(--magenta)}
+.fase{font-family:var(--f-mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--magenta);margin-top:22px}
+.formato{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.formato span{padding:7px 12px;border-radius:10px;background:var(--card);border:2px solid var(--magenta);font-weight:700;font-size:16px}
+.escalera{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px}
+.escalera span{padding:6px 12px;border-radius:10px;background:#7A0F4B;color:#fff;font-weight:700;font-size:15px}
+.escalera em{font-style:normal;color:var(--muted)}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:18px;overflow:hidden;margin-top:14px;font-size:16.5px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--f-mono);font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);background:var(--soft)}
+td:first-child{font-weight:700;width:190px}
+.tabla{overflow-x:auto}
+.metodo{margin-top:18px;background:var(--card);border-radius:22px;padding:22px;border-top:7px solid var(--c)}
+.metodo .quien{font-size:16px;color:var(--muted)}
+.metodo .idea{font-family:var(--f-display);font-weight:800;font-size:22px;color:var(--c);margin-top:10px;line-height:1.25}
+.metodo .flujo{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:12px}
+.metodo .flujo span{padding:6px 12px;border-radius:10px;background:var(--c);color:#fff;font-weight:700;font-size:15px}
+.metodo .flujo em{font-style:normal;color:var(--muted)}
+.metodo .dos .caja{background:var(--soft)}
+.cuando{margin-top:12px;font-size:16.5px;background:color-mix(in srgb,var(--c) 8%,#fff);border-radius:14px;padding:12px 14px}
+footer{margin-top:44px;font-size:15px;color:var(--muted)}
+@media (max-width:700px){
+  body{font-size:17px}
+  .wrap{padding-inline:16px}
+  .dos{grid-template-columns:1fr}
+  .paso{grid-template-columns:46px 1fr;padding:14px}
+  .paso .n{width:46px;height:46px;font-size:14px;border-radius:13px}
+  .hero,.metodo{padding:18px}
+  td:first-child{width:auto}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="volver" href="index.html">← Volver al canvas de Achievers</a>
+<div class="lab">Guía rápida para el equipo</div>
+<h1>Métodos de innovación</h1>
+<p>Lo esencial de cada método para no tener que leer los artículos completos. Primero el método principal, Lean LaunchPad 2026, paso a paso; después los otros cuatro.</p>
+<nav class="indice" aria-label="Métodos">
+  <a href="#llp" style="--c:var(--magenta)">Lean LaunchPad 2026</a>
+  <a href="#ls" style="--c:var(--naranja)">Lean Startup</a>
+  <a href="#im" style="--c:var(--verde)">Innovator's Method</a>
+  <a href="#vl" style="--c:var(--azul)">Value Lab</a>
+  <a href="#dna" style="--c:var(--dna)">Innovator's DNA</a>
+</nav>
+
+<section id="llp">
+  <div class="hero">
+    <div class="lab" style="color:var(--magenta)">Método principal · Steve Blank · 2026</div>
+    <h2 style="margin-top:6px">Lean LaunchPad 2026</h2>
+    <p class="big">Con IA, construir un producto ya es fácil. Lo difícil es entender al cliente y conseguir evidencia de que de verdad lo quiere.</p>
+    <p>Steve Blank rediseñó su clase de Stanford para la era de la IA. La idea: no gastar el tiempo construyendo, sino descubriendo a quién le duele el problema, quién decide, quién paga y qué cuenta como éxito. La prueba final no es un producto bonito: es un cliente que se compromete con tiempo, datos o dinero.</p>
+  </div>
+
+  <h2>Qué cambia frente al método anterior</h2>
+  <div class="dos">
+    <div class="caja antes"><h3>Antes (Lean Startup y el Lean LaunchPad clásico)</h3><ul>
+      <li>Se construía un MVP para aprender.</li>
+      <li>Construir era lento y caro.</li>
+      <li>La meta era el encaje producto-mercado.</li>
+      <li>Las entrevistas eran solo con personas reales.</li></ul></div>
+    <div class="caja ahora"><h3>Ahora (Lean LaunchPad 2026)</h3><ul>
+      <li>El MVP desaparece. La IA hace un producto inicial (IUP) en días, pero no se muestra completo: solo pedazos llamados snippets.</li>
+      <li>Lo difícil es entender al cliente, no construir.</li>
+      <li>La meta es el encaje producto-resultado: que el cliente logre el resultado que necesita.</li>
+      <li>Se usan clientes simulados con IA, pero las entrevistas reales mandan.</li>
+      <li>La validación son los design partners: clientes que se comprometen de verdad.</li></ul></div>
+  </div>
+
+  <h2>Qué se necesita antes de empezar</h2>
+  <div class="dos">
+    <div class="caja"><h3>Herramientas</h3><ul>
+      <li>Business Model Canvas: las 9 casillas del negocio.</li>
+      <li>Mapa de stakeholders: quién decide, quién paga, quién usa y quién influye.</li>
+      <li>Mapa de hipótesis: lo que creemos y aún no está probado.</li>
+      <li>Value Proposition Canvas: qué dolor quitas y qué ganancia das.</li>
+      <li>Tarjetas de experimento.</li>
+      <li>Agentes de IA para investigar, tomar notas y crear personajes.</li></ul></div>
+    <div class="caja"><h3>Hábitos</h3><ul>
+      <li>10 a 15 entrevistas por semana, grabadas con permiso.</li>
+      <li>Registrar cada una en el formato de 5 pasos (abajo).</li>
+      <li>Medir comportamiento, no solo opiniones.</li>
+      <li>Cada integrante debe poder explicar el cliente, la evidencia y los números sin computador.</li>
+      <li>Marcar qué hizo la IA y qué está verificado.</li></ul></div>
+  </div>
+  <p><b>Formato para registrar cada entrevista o experimento:</b></p>
+  <div class="formato"><span>Hipótesis</span><span>→ Experimento</span><span>→ Resultado esperado</span><span>→ Resultado real</span><span>→ Siguiente paso</span></div>
+
+  <h2>Paso a paso</h2>
+  <div class="fase">Fase 1 · Semanas 1 a 4 · Pensar a fondo</div>
+  <ol class="pasos">
+    <li class="paso"><span class="n">0</span><div><h3>Antes de la primera clase</h3><ul>
+      <li>Hacer el Business Model Canvas, el mapa de stakeholders y el mapa de hipótesis.</li>
+      <li>Escribir el insight: qué dice el consenso y qué crees tú que lo contradice.</li>
+      <li>Crear los primeros snippets.</li>
+      <li>Hacer al menos 10 entrevistas reales grabadas, la mitad en persona.</li>
+      <li>Crear 5 personajes de IA y entrevistarlos. La IA analiza las respuestas, da la visión de consenso y propone preguntas para las entrevistas reales. Nosotros los creamos a partir de las primeras entrevistas reales.</li></ul>
+      <p class="sale"><b>Sale:</b> canvas v0, mapas y las primeras entrevistas.</p></div></li>
+    <li class="paso"><span class="n">S1</span><div><h3>Stakeholders, hipótesis y snippets</h3><ul>
+      <li>Presentar con el formato: qué pensábamos, qué hicimos, qué encontramos y qué haremos.</li>
+      <li>Los snippets sirven para descubrir, no para validar.</li>
+      <li>Mostrar una tabla resumen de las entrevistas, con citas y fotos, y compararla con las entrevistas sintéticas.</li></ul></div></li>
+    <li class="paso"><span class="n">S2</span><div><h3>Experimentos</h3><ul>
+      <li>Diseñar y correr experimentos con las tarjetas.</li>
+      <li>Definir los tipos de stakeholder (arquetipos).</li>
+      <li>Contactar en frío a clientes nuevos.</li></ul></div></li>
+    <li class="paso"><span class="n">S3</span><div><h3>Mercado y competencia</h3><ul>
+      <li>Segmentos, competidores y qué te protege de que te copien (moat).</li>
+      <li>Estrategia para conseguir design partners y salir al mercado.</li></ul></div></li>
+    <li class="paso puerta"><span class="n">S4</span><div><h3>Puerta: ¿pivotar o seguir?</h3><ul>
+      <li>El canvas se prueba casilla por casilla: es el Minimal Tested Canvas.</li>
+      <li>Se decide con evidencia sobre 5 criterios: hay stakeholders con un problema real; les importa la propuesta de valor; hay diferenciación; pagarían y los números cierran; hay forma de conseguir y retener clientes.</li>
+      <li>Si algo falla, se pivota esa casilla. No se empieza de cero.</li></ul>
+      <p class="sale"><b>Sale:</b> un producto parcialmente probado (PTP) y un canvas parcialmente probado.</p></div></li>
+  </ol>
+  <div class="fase">Fase 2 · Semanas 5 a 9 · Actuar rápido</div>
+  <ol class="pasos">
+    <li class="paso fase2"><span class="n">S5</span><div><h3>Salir a buscar design partners</h3><ul>
+      <li>Probar la estrategia para conseguirlos.</li>
+      <li>Calcular cuánto cuesta la IA del producto.</li></ul></div></li>
+    <li class="paso fase2"><span class="n">S6–S8</span><div><h3>Trabajar con los design partners</h3><ul>
+      <li>Un design partner pone recursos escasos: tiempo de su gente, datos, permisos o cambios en su forma de trabajar.</li>
+      <li>Se avanza por la escalera del socio:</li></ul>
+      <div class="escalera"><span>Se engancha</span><em>→</em><span>Usa el producto</span><em>→</em><span>Ve un valor medible</span><em>→</em><span>Refiere a otros</span><em>→</em><span>Paga</span></div></div></li>
+    <li class="paso fase2"><span class="n">S9</span><div><h3>Lecciones aprendidas</h3><ul>
+      <li>Presentación final: qué se validó, qué se pivotó y qué sigue.</li></ul>
+      <p class="sale"><b>Sale:</b> un producto validado por los design partners (DPVP).</p></div></li>
+  </ol>
+
+  <h2>Glosario</h2>
+  <div class="tabla"><table>
+    <thead><tr><th>Término</th><th>Qué es</th></tr></thead>
+    <tbody>
+      <tr><td>IUP</td><td>Producto inicial hecho con IA. Se ve terminado, pero nadie lo ha probado.</td></tr>
+      <tr><td>Snippet</td><td>Un pedazo pequeño del IUP para probar una sola hipótesis.</td></tr>
+      <tr><td>Stakeholders</td><td>Todos los que influyen: usuarios, quien decide, quien paga, quien recomienda, dueños de datos e incluso quien puede frenarlo.</td></tr>
+      <tr><td>Minimal Tested Canvas</td><td>El mínimo de experimentos para probar cada casilla del canvas.</td></tr>
+      <tr><td>PTP</td><td>Producto parcialmente probado (semana 4).</td></tr>
+      <tr><td>Encaje producto-resultado</td><td>El producto logra el resultado que el cliente necesita.</td></tr>
+      <tr><td>Design partner</td><td>Cliente que se compromete con tiempo, datos o dinero y co-diseña.</td></tr>
+      <tr><td>DPVP</td><td>Producto validado por los design partners (semana 9).</td></tr>
+    </tbody></table></div>
+  <p><b>Cómo lo usamos con Achievers:</b> modelamos el canvas actual y el soñado, probamos cada casilla con snippets y encuestas, y buscamos empresas y estudiantes que se comprometan con un piloto.</p>
+</section>
+
+<h2>Los otros métodos</h2>
+
+<article class="metodo" id="ls" style="--c:var(--naranja)">
+  <div class="lab" style="color:var(--naranja)">Lean Startup</div>
+  <p class="quien">Eric Ries · 2011</p>
+  <p class="idea">Construye lo mínimo para aprender rápido y no desperdiciar recursos.</p>
+  <div class="flujo"><span>Construir</span><em>→</em><span>Medir</span><em>→</em><span>Aprender</span><em>↺</em><span>Pivotar o perseverar</span></div>
+  <div class="dos">
+    <div class="caja"><h3>Pasos</h3><ul>
+      <li>Escribir los supuestos de salto de fe: ¿genera valor? ¿puede crecer?</li>
+      <li>Construir un MVP: la versión más simple para probarlos con clientes reales. No es el producto final.</li>
+      <li>Medir con métricas accionables.</li>
+      <li>Decidir: pivotar o perseverar.</li></ul></div>
+    <div class="caja"><h3>Qué necesitas</h3><ul>
+      <li>Un MVP.</li>
+      <li>Métricas accionables (inscripciones, pagos, reuniones), no de vanidad (seguidores, likes).</li>
+      <li>Ciclos cortos de prueba.</li></ul></div>
+  </div>
+  <p class="cuando"><b>Cuándo usarlo:</b> para un producto nuevo con mucha incertidumbre. En Achievers sirve para medir sin engañarnos, por ejemplo con inscripciones en vez de seguidores.</p>
+</article>
+
+<article class="metodo" id="im" style="--c:var(--verde)">
+  <div class="lab" style="color:var(--verde)">Innovator's Method</div>
+  <p class="quien">Nathan Furr y Jeff Dyer · 2014</p>
+  <p class="idea">Lleva la lógica de Lean Startup a las empresas grandes, por etapas: primero el problema, después la solución y solo entonces el negocio.</p>
+  <div class="flujo"><span>Insight</span><em>→</em><span>Problema</span><em>→</em><span>Solución</span><em>→</em><span>Modelo de negocio</span><em>→</em><span>Escalar</span></div>
+  <div class="dos">
+    <div class="caja"><h3>Pasos</h3><ul>
+      <li>Insight: algo que te sorprende al observar.</li>
+      <li>Problema: confirmar que de verdad le duele al cliente (su Job-to-be-Done).</li>
+      <li>Solución: prototipos hasta llegar al MAP, el producto mínimo asombroso.</li>
+      <li>Modelo de negocio: probar cómo se vende y se cobra.</li>
+      <li>Pivotar en cualquier etapa.</li></ul></div>
+    <div class="caja"><h3>Qué necesitas</h3><ul>
+      <li>Observación y entrevistas.</li>
+      <li>Hipótesis por etapa.</li>
+      <li>Prototipos y experimentos de modelo de negocio.</li></ul></div>
+  </div>
+  <p class="cuando"><b>Cuándo usarlo:</b> para innovar dentro de una empresa establecida. En Achievers sirve para confirmar el problema de cada segmento antes de construir un nivel de la academia.</p>
+</article>
+
+<article class="metodo" id="vl" style="--c:var(--azul)">
+  <div class="lab" style="color:var(--azul)">Value Lab</div>
+  <p class="quien">Teppo Felin, Alfonso Gambardella y Todd Zenger · 2021</p>
+  <p class="idea">Antes de experimentar, desafía los paradigmas: ¿qué crees tú que casi nadie cree?</p>
+  <div class="flujo"><span>Creencia común</span><em>→</em><span>Creencia contraria</span><em>→</em><span>Teoría: Si… entonces…</span><em>→</em><span>Experimentos</span></div>
+  <div class="dos">
+    <div class="caja"><h3>Pasos</h3><ul>
+      <li>Escribir lo que todos creen y lo que tú crees distinto.</li>
+      <li>Armar una teoría: si resolvemos estos problemas, entonces creamos este valor.</li>
+      <li>Elegir el experimento correcto, no el más rápido ni el más fácil de medir.</li></ul></div>
+    <div class="caja"><h3>Qué necesitas</h3><ul>
+      <li>Una creencia contraria bien argumentada.</li>
+      <li>El lienzo de Value Lab (teoría y acciones).</li>
+      <li>Experimentos que la teoría elige.</li></ul></div>
+  </div>
+  <p class="cuando"><b>Cuándo usarlo:</b> para definir una estrategia distinta antes de probar. Evita "buscar bajo la farola": medir donde es fácil y no donde está la respuesta. En Achievers: llevar a todos a nuevos puntos de vista sin alterar lo que ya está establecido.</p>
+</article>
+
+<article class="metodo" id="dna" style="--c:var(--dna)">
+  <div class="lab" style="color:var(--dna)">Innovator's DNA</div>
+  <p class="quien">Jeff Dyer, Hal Gregersen y Clayton Christensen · 2011</p>
+  <p class="idea">Los innovadores no nacen: practican 5 habilidades que se pueden entrenar.</p>
+  <div class="flujo"><span>Preguntar</span><span>Observar</span><span>Hacer contactos</span><span>Experimentar</span><span>Asociar</span></div>
+  <div class="dos">
+    <div class="caja"><h3>Pasos</h3><ul>
+      <li>Hacer la autoevaluación iDNA.</li>
+      <li>Armar el Team Canvas con las fortalezas de cada uno.</li>
+      <li>Usar las habilidades: preguntar (QuestionStorming), observar lo que la gente hace y asociar ideas de otros sectores.</li></ul></div>
+    <div class="caja"><h3>Qué necesitas</h3><ul>
+      <li>La autoevaluación de cada integrante.</li>
+      <li>El Team Canvas.</li>
+      <li>Práctica en las entrevistas y en la lluvia de ideas.</li></ul></div>
+  </div>
+  <p class="cuando"><b>Cuándo usarlo:</b> para armar equipos y desarrollar a las personas. No es un proceso paso a paso: explica quién innova, mientras los otros métodos explican cómo.</p>
+</article>
+
+<h2>En una tabla</h2>
+<div class="tabla"><table>
+  <thead><tr><th>Método</th><th>Arranca de</th><th>Su evidencia es</th></tr></thead>
+  <tbody>
+    <tr><td style="color:var(--magenta)">Lean LaunchPad 2026</td><td>Los stakeholders y sus problemas</td><td>Clientes que se comprometen (design partners)</td></tr>
+    <tr><td style="color:var(--naranja)">Lean Startup</td><td>Los supuestos</td><td>Métricas accionables del MVP</td></tr>
+    <tr><td style="color:var(--verde)">Innovator's Method</td><td>Un insight (una sorpresa)</td><td>Problema confirmado, luego solución y negocio</td></tr>
+    <tr><td style="color:var(--azul)">Value Lab</td><td>Una creencia contraria</td><td>Experimentos que elige la teoría</td></tr>
+    <tr><td style="color:var(--dna)">Innovator's DNA</td><td>Las personas</td><td>Las 5 habilidades en práctica</td></tr>
+  </tbody></table></div>
+
+<footer>Resumen en nuestras palabras para el proyecto de grado con Achievers Lab (2026-20). Fuente principal: Blank, S. (2026, 30 de septiembre). <i>Lean LaunchPad – The next generation</i>. Steve Blank (Substack). <a href="https://steveblank.substack.com/p/lean-launchpad-the-next-generation" target="_blank" rel="noopener">Leer el artículo completo</a>.</footer>
+</div>
+</body>
+</html>
