@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>JAM de Innovación Continua</title>
+<meta name="description" content="Sus retos de innovación, resueltos todo el semestre por equipos de estudiantes con mentores, y acceso a talento probado.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: portada oscura con video en bucle → tres promesas → cómo funciona (línea de 4 meses) → por reto contra continuo → qué recibe cada mes → preguntas → cierre con los dos botones. Un solo tema deliberado: tinta y marfil con acento champán. */
+:root{
+  color-scheme:light;
+  --ink:#0A1220; --ink2:#111B2D; --ivory:#F6F1E7; --paper:#FBF8F2; --gold:#C8A96A; --gold2:#E5CB8E;
+  --text:#18202E; --muted:#5E6676; --line:#E4DCCB; --green:#1F7A5A;
+  --serif:"Instrument Serif","Times New Roman",serif;
+  --sans:"Manrope","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--text);font-family:var(--sans);font-size:18px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:24px}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+h1,h2,h3{font-family:var(--serif);font-weight:400;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1{font-size:clamp(46px,7.2vw,96px);line-height:.98}
+h2{font-size:clamp(36px,4.8vw,62px);line-height:1.02}
+h3{font-size:28px;line-height:1.1}
+em{font-style:italic;color:var(--gold2)}
+p{margin:0}
+
+/* Botones */
+.btn{display:inline-flex;align-items:center;gap:10px;font:600 16px var(--sans);letter-spacing:.01em;padding:16px 26px;border-radius:999px;border:1px solid transparent;cursor:pointer;text-decoration:none;transition:transform .2s ease,background .2s ease,box-shadow .2s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn:focus-visible{outline:3px solid var(--gold2);outline-offset:3px}
+.btn-oro{background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--ink);box-shadow:0 10px 30px rgba(200,169,106,.35)}
+.btn-oro:hover{box-shadow:0 14px 36px rgba(200,169,106,.5)}
+.btn-linea{background:transparent;color:var(--ivory);border-color:rgba(246,241,231,.4)}
+.btn-linea:hover{background:rgba(246,241,231,.08)}
+.btn-tinta{background:var(--ink);color:var(--ivory)}
+.btn .fl{font-family:var(--mono);font-size:14px}
+
+/* Navegación */
+nav{position:absolute;top:0;left:0;right:0;z-index:5;padding-top:env(safe-area-inset-top,0px)}
+nav .wrap{display:flex;justify-content:space-between;align-items:center;padding-block:22px}
+.marca{font-family:var(--serif);font-size:24px;color:var(--ivory);letter-spacing:.01em}
+.marca span{color:var(--gold)}
+nav .btn{padding:11px 18px;font-size:14.5px}
+
+/* Portada */
+.hero{position:relative;background:var(--ink);color:var(--ivory);overflow:hidden;padding-block:150px 110px}
+.hero video,.hero .poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,18,32,.96) 0%,rgba(10,18,32,.78) 45%,rgba(10,18,32,.25) 100%),linear-gradient(0deg,rgba(10,18,32,.9),rgba(10,18,32,0) 40%)}
+.hero .wrap{position:relative;z-index:2}
+.hero h1{max-width:13ch;margin-top:18px}
+.hero .sub{max-width:52ch;margin-top:26px;font-size:20px;color:rgba(246,241,231,.82)}
+.hero .ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:38px}
+.hero .nota{margin-top:22px;font-size:14.5px;color:rgba(246,241,231,.6)}
+
+/* Promesas */
+.promesas{background:var(--ink2);color:var(--ivory)}
+.promesas .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.prom{padding:42px 32px;border-left:1px solid rgba(200,169,106,.18)}
+.prom:first-child{border-left:0;padding-left:0}
+.prom .n{font-family:var(--mono);font-size:13px;color:var(--gold)}
+.prom h3{margin-top:14px;font-size:30px}
+.prom p{margin-top:10px;color:rgba(246,241,231,.72);font-size:16.5px}
+
+section.blanca{padding-block:110px}
+.cabeza{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end}
+.cabeza p{color:var(--muted);font-size:19px;max-width:48ch}
+
+/* Cómo funciona */
+.ruta{position:relative;margin-top:64px;display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.ruta::before{content:"";position:absolute;left:0;right:0;top:27px;height:1px;background:linear-gradient(90deg,transparent,var(--gold) 8%,var(--gold) 92%,transparent)}
+.paso{position:relative}
+.paso .pt{width:56px;height:56px;border-radius:50%;background:var(--paper);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:24px;color:var(--ink);position:relative;z-index:1}
+.paso .cuando{margin-top:22px;font-family:var(--mono);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+.paso h3{margin-top:8px}
+.paso p{margin-top:10px;color:var(--muted);font-size:16.5px}
+
+/* Comparación */
+.compara{background:var(--ivory)}
+.tabla{margin-top:54px;border-radius:28px;overflow:hidden;background:var(--paper);border:1px solid var(--line)}
+.fila{display:grid;grid-template-columns:1.1fr 1fr 1.15fr}
+.fila>div{padding:22px 26px;border-top:1px solid var(--line)}
+.fila.cab>div{border-top:0;padding-block:28px}
+.fila .k{font-weight:600}
+.fila .v2{background:linear-gradient(180deg,rgba(200,169,106,.12),rgba(200,169,106,.06));border-left:1px solid rgba(200,169,106,.4)}
+.cab .titulo{font-family:var(--serif);font-size:30px;line-height:1.05}
+.cab .sello{display:inline-block;margin-top:8px;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;padding:5px 10px;border-radius:999px;background:var(--ink);color:var(--gold2)}
+.si{color:var(--green);font-weight:700}
+
+/* Cada mes */
+.mes{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+.lista{list-style:none;margin:30px 0 0;padding:0}
+.lista li{display:grid;grid-template-columns:34px 1fr;gap:14px;padding:16px 0;border-top:1px solid var(--line)}
+.lista li:last-child{border-bottom:1px solid var(--line)}
+.lista .ck{width:26px;height:26px;border-radius:50%;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:14px;margin-top:3px}
+.lista b{display:block;font-weight:600}
+.lista span{color:var(--muted);font-size:16px}
+.tarjeta{position:relative;border-radius:30px;background:var(--ink);color:var(--ivory);padding:44px 40px;overflow:hidden}
+.tarjeta::before{content:"";position:absolute;width:380px;height:380px;right:-140px;top:-160px;border-radius:50%;background:radial-gradient(circle,rgba(229,203,142,.35),rgba(229,203,142,0) 70%)}
+.tarjeta .plan{font-family:var(--mono);font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.tarjeta .precio{font-family:var(--serif);font-size:58px;line-height:1;margin-top:18px}
+.tarjeta .precio small{font-family:var(--sans);font-size:16px;color:rgba(246,241,231,.6);margin-left:6px}
+.tarjeta .det{margin-top:14px;color:rgba(246,241,231,.75);font-size:16.5px}
+.tarjeta ul{list-style:none;padding:0;margin:26px 0 30px;display:grid;gap:10px}
+.tarjeta li{display:flex;gap:10px;font-size:16.5px}
+.tarjeta li::before{content:"—";color:var(--gold)}
+
+/* Métodos */
+.metodos{background:var(--ink);color:var(--ivory);padding-block:90px}
+.metodos .wrap{display:grid;grid-template-columns:1fr 1.2fr;gap:60px;align-items:center}
+.metodos p{color:rgba(246,241,231,.75);font-size:18px}
+.sellos{display:flex;flex-wrap:wrap;gap:10px}
+.sellos span{border:1px solid rgba(200,169,106,.5);color:var(--gold2);border-radius:999px;padding:10px 18px;font-size:15px}
+
+/* Preguntas */
+.faq{margin-top:46px;display:grid;gap:12px}
+details{border:1px solid var(--line);border-radius:20px;background:var(--paper);padding:0 24px}
+summary{cursor:pointer;list-style:none;padding:22px 0;font-weight:600;font-size:18px;display:flex;justify-content:space-between;gap:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-family:var(--serif);font-size:28px;line-height:.8;color:var(--gold)}
+details[open] summary::after{content:"–"}
+details p{padding-bottom:22px;color:var(--muted)}
+summary:focus-visible{outline:3px solid var(--gold);outline-offset:4px;border-radius:8px}
+
+/* Cierre */
+.cierre{background:var(--ink);color:var(--ivory);text-align:center;padding-block:120px;position:relative;overflow:hidden}
+.cierre::before{content:"";position:absolute;left:50%;top:-260px;width:820px;height:820px;margin-left:-410px;border-radius:50%;background:radial-gradient(circle,rgba(200,169,106,.18),rgba(200,169,106,0) 65%)}
+.cierre .wrap{position:relative}
+.cierre h2{max-width:16ch;margin:16px auto 0}
+.cierre p{max-width:52ch;margin:22px auto 0;color:rgba(246,241,231,.75)}
+.cierre .ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:38px}
+footer{background:var(--ink);color:rgba(246,241,231,.45);font-size:14px;border-top:1px solid rgba(200,169,106,.15)}
+footer .wrap{padding-block:26px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* Formularios */
+dialog{width:min(560px,calc(100vw - 32px));border:0;border-radius:28px;padding:0;background:var(--paper);color:var(--text);box-shadow:0 40px 120px rgba(0,0,0,.45)}
+dialog::backdrop{background:rgba(10,18,32,.72);backdrop-filter:blur(4px)}
+.dlg{padding:36px 34px 32px}
+.dlg h3{font-size:36px}
+.dlg .intro{color:var(--muted);margin-top:8px;font-size:16.5px}
+.campo{display:grid;gap:6px;margin-top:16px}
+.campo label{font-size:14px;font-weight:600}
+.campo input,.campo textarea{font:16px var(--sans);color:var(--text);background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 14px;width:100%}
+.campo textarea{min-height:120px;resize:vertical}
+.campo input:focus,.campo textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,169,106,.25)}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.acciones{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:24px;flex-wrap:wrap}
+.cerrar{background:none;border:0;font:600 15px var(--sans);color:var(--muted);cursor:pointer;padding:10px 4px}
+.estado{margin-top:12px;font-size:15px}
+.estado.err{color:#B42318}
+.gracias{text-align:center;padding:30px 10px 10px}
+.gracias .sel{width:64px;height:64px;border-radius:50%;margin:0 auto;background:linear-gradient(135deg,var(--gold2),var(--gold));display:flex;align-items:center;justify-content:center;font-size:30px;color:var(--ink)}
+.gracias h3{margin-top:18px}
+.gracias p{color:var(--muted);margin-top:8px}
+
+/* Movimiento al aparecer: parte visible y sube un poco */
+.sube{transform:translateY(14px);transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.sube.ver{transform:none}
+@media (prefers-reduced-motion:reduce){.sube{transform:none;transition:none}.btn{transition:none}html{scroll-behavior:auto}.hero video{display:none}}
+
+@media (max-width:900px){
+  .promesas .wrap,.cabeza,.mes,.metodos .wrap{grid-template-columns:1fr}
+  .prom{border-left:0;border-top:1px solid rgba(200,169,106,.18);padding:30px 0}
+  .prom:first-child{border-top:0}
+  .ruta{grid-template-columns:1fr 1fr;row-gap:44px}
+  .ruta::before{display:none}
+  .mes{gap:40px}
+  .fila{grid-template-columns:1fr 1fr 1fr}
+  .fila>div{padding:16px 14px;font-size:15.5px}
+  .cab .titulo{font-size:22px}
+}
+@media (max-width:560px){
+  body{font-size:17px}
+  .wrap{padding-inline:18px}
+  .hero{padding-block:120px 80px}
+  .hero .sub{font-size:18px}
+  nav .btn{display:none}
+  section.blanca{padding-block:76px}
+  .ruta{grid-template-columns:1fr}
+  .fila{grid-template-columns:1fr 1fr}
+  .fila .k{grid-column:1/-1;padding-bottom:0;border-top:1px solid var(--line)}
+  .fila .v1,.fila .v2{border-top:0}
+  .fila.cab .k{display:none}
+  .dos{grid-template-columns:1fr}
+  .dlg{padding:28px 22px 24px}
+  .tarjeta{padding:34px 26px}
+}
+</style>
+</head>
+<body>
+
+<nav aria-label="Principal">
+  <div class="wrap">
+    <div class="marca">Achievers <span>Lab</span></div>
+    <button class="btn btn-linea" type="button" data-abrir="dlg-agendar">Agendar 20 minutos</button>
+  </div>
+</nav>
+
+<header class="hero">
+  <video autoplay muted loop playsinline poster="jam-hero.jpg" aria-hidden="true"><source src="jam-hero.mp4" type="video/mp4"></video>
+  <div class="wrap">
+    <div class="eyebrow">JAM de Innovación Continua · Para empresas</div>
+    <h1>Sus retos de innovación, <em>resueltos</em> todo el semestre.</h1>
+    <p class="sub">Usted propone retos cada mes. Equipos de estudiantes universitarios, guiados por mentores de innovación, los resuelven con métodos probados. Y usted conoce a los mejores antes de contratarlos.</p>
+    <div class="ctas">
+      <button class="btn btn-oro" type="button" data-abrir="dlg-reto">Propóngalo ya <span class="fl">→</span></button>
+      <button class="btn btn-linea" type="button" data-abrir="dlg-agendar">Agendar 20 minutos</button>
+    </div>
+    <p class="nota">Cupos limitados por semestre.</p>
+  </div>
+</header>
+
+<section class="promesas" aria-label="Lo que gana su empresa">
+  <div class="wrap">
+    <div class="prom sube"><div class="n">01</div><h3>Innovación sin distraer a su equipo</h3><p>Su gente sigue en lo suyo. Usted solo propone el reto y revisa avances.</p></div>
+    <div class="prom sube"><div class="n">02</div><h3>Resultados cada mes, no al final</h3><p>Los retos avanzan en paralelo y usted ve progreso en cada revisión.</p></div>
+    <div class="prom sube"><div class="n">03</div><h3>Talento probado antes de contratar</h3><p>Ve cómo trabaja cada estudiante con un problema real de su empresa.</p></div>
+  </div>
+</section>
+
+<section class="blanca" aria-labelledby="t-como">
+  <div class="wrap">
+    <div class="cabeza">
+      <div><div class="eyebrow">Cómo funciona</div><h2 id="t-como" style="margin-top:14px">Un flujo continuo de retos y soluciones.</h2></div>
+      <p>Usted no tiene que esperar a un nuevo programa para cada problema. Cada mes entra un reto nuevo y los equipos trabajan en varios a la vez.</p>
+    </div>
+    <div class="ruta">
+      <div class="paso sube"><div class="pt">1</div><div class="cuando">Cada mes</div><h3>Usted propone el reto</h3><p>Una conversación corta para entender el problema y qué sería un buen resultado.</p></div>
+      <div class="paso sube"><div class="pt">2</div><div class="cuando">Semana 1</div><h3>Armamos el equipo</h3><p>Estudiantes de distintas carreras, guiados por un mentor de innovación.</p></div>
+      <div class="paso sube"><div class="pt">3</div><div class="cuando">Durante el mes</div><h3>Revisa los avances</h3><p>Hipótesis, pruebas con clientes reales y aprendizajes, no solo presentaciones.</p></div>
+      <div class="paso sube"><div class="pt">4</div><div class="cuando">Cierre</div><h3>Recibe solución y talento</h3><p>Una propuesta probada y los perfiles destacados del equipo.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="blanca compara" aria-labelledby="t-compara">
+  <div class="wrap">
+    <div class="cabeza">
+      <div><div class="eyebrow">Dos formas de trabajar</div><h2 id="t-compara" style="margin-top:14px">Por reto, o de forma continua.</h2></div>
+      <p>El JAM por reto funciona para un problema puntual. El JAM continuo es para empresas que innovan todo el año.</p>
+    </div>
+    <div class="tabla" role="table" aria-label="Comparación">
+      <div class="fila cab" role="row"><div class="k" role="columnheader"></div><div class="v1" role="columnheader"><div class="titulo">JAM por reto</div></div><div class="v2" role="columnheader"><div class="titulo">JAM continuo</div><span class="sello">Recomendado</span></div></div>
+      <div class="fila" role="row"><div class="k" role="cell">Retos</div><div class="v1" role="cell">Uno por programa</div><div class="v2" role="cell">Varios al mes, todo el semestre</div></div>
+      <div class="fila" role="row"><div class="k" role="cell">Ritmo</div><div class="v1" role="cell">3 sesiones: reto, avance y resultado</div><div class="v2" role="cell">Revisiones continuas, sin empezar de cero</div></div>
+      <div class="fila" role="row"><div class="k" role="cell">Equipos</div><div class="v1" role="cell">Un equipo</div><div class="v2" role="cell">Equipos en paralelo, presenciales y virtuales</div></div>
+      <div class="fila" role="row"><div class="k" role="cell">Acceso a talento</div><div class="v1" role="cell">Al final del programa</div><div class="v2" role="cell"><span class="si">✓</span> Todo el semestre</div></div>
+      <div class="fila" role="row"><div class="k" role="cell">Forma de pago</div><div class="v1" role="cell">Por reto</div><div class="v2" role="cell">Mensualidad</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="blanca" aria-labelledby="t-mes">
+  <div class="wrap mes">
+    <div>
+      <div class="eyebrow">Lo que recibe cada mes</div>
+      <h2 id="t-mes" style="margin-top:14px">Innovación que se ve en resultados.</h2>
+      <ul class="lista">
+        <li class="sube"><span class="ck">✓</span><div><b>Retos en curso con su avance</b><span>Qué se probó, con quién y qué se aprendió.</span></div></li>
+        <li class="sube"><span class="ck">✓</span><div><b>Soluciones probadas con clientes reales</b><span>Evidencia para decidir, no opiniones.</span></div></li>
+        <li class="sube"><span class="ck">✓</span><div><b>Perfiles destacados</b><span>Los estudiantes que mejor trabajaron en sus retos.</span></div></li>
+        <li class="sube"><span class="ck">✓</span><div><b>Un mentor de innovación a cargo</b><span>Un solo punto de contacto para su empresa.</span></div></li>
+      </ul>
+    </div>
+    <aside class="tarjeta sube" aria-label="Plan mensual">
+      <div class="plan">Plan mensual · JAM continuo</div>
+      <div class="precio" id="precio">A su medida</div>
+      <p class="det" id="precio-det">El valor depende de cuántos retos al mes necesite. Lo definimos con usted en 20 minutos.</p>
+      <ul>
+        <li>Retos mensuales según su plan</li>
+        <li>Equipos con mentor de innovación</li>
+        <li>Revisiones de avance cada mes</li>
+        <li>Acceso a los perfiles destacados</li>
+      </ul>
+      <button class="btn btn-oro" type="button" data-abrir="dlg-agendar">Agendar 20 minutos <span class="fl">→</span></button>
+    </aside>
+  </div>
+</section>
+
+<section class="metodos" aria-labelledby="t-met">
+  <div class="wrap">
+    <div><div class="eyebrow">Métodos probados</div><h2 id="t-met" style="margin-top:14px">Rigor de universidad, velocidad de startup.</h2></div>
+    <div>
+      <p>Cada reto se trabaja con los métodos de innovación que usan las mejores escuelas de emprendimiento: se formulan hipótesis, se prueban con clientes reales y se decide con evidencia.</p>
+      <div class="sellos" style="margin-top:22px"><span>Lean LaunchPad</span><span>Innovator's Method</span><span>Lean Startup</span><span>Value Lab</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="blanca" aria-labelledby="t-faq">
+  <div class="wrap" style="max-width:900px">
+    <div class="eyebrow">Preguntas frecuentes</div>
+    <h2 id="t-faq" style="margin-top:14px">Lo que suelen preguntar.</h2>
+    <div class="faq">
+      <details><summary>¿Cuánto tiempo le toma a mi equipo?</summary><p>Muy poco: proponer el reto y asistir a las revisiones de avance. El trabajo lo hacen los equipos de estudiantes con su mentor.</p></details>
+      <details><summary>¿Qué tipo de retos puedo proponer?</summary><p>Retos de innovación: un nuevo canal de ventas, mejorar la experiencia del cliente, hacer un proceso más ágil, probar un producto o un uso de la inteligencia artificial.</p></details>
+      <details><summary>¿Puedo contratar a los estudiantes?</summary><p>Sí. Durante el semestre usted ve cómo trabaja cada estudiante y recibe los perfiles destacados.</p></details>
+      <details><summary>¿Y si solo tengo un reto?</summary><p>Para un reto puntual existe el JAM por reto. Si tiene varios durante el año, el JAM continuo le sale mejor.</p></details>
+      <details><summary>¿Qué pasa con la información de mi empresa?</summary><p>Se trabaja solo con la información que usted comparta, y se puede acordar confidencialidad antes de empezar.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="cierre" aria-labelledby="t-cierre">
+  <div class="wrap">
+    <div class="eyebrow">Cupos limitados por semestre</div>
+    <h2 id="t-cierre">¿Qué reto le gustaría resolver este mes?</h2>
+    <p>Cuéntenos en dos minutos o agende una conversación de 20 minutos. Le respondemos en menos de un día hábil.</p>
+    <div class="ctas">
+      <button class="btn btn-oro" type="button" data-abrir="dlg-reto">Propóngalo ya <span class="fl">→</span></button>
+      <button class="btn btn-linea" type="button" data-abrir="dlg-agendar">Agendar 20 minutos</button>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap"><span>Achievers Lab · JAM de Innovación Continua</span><span>Innovación con talento universitario</span></div></footer>
+
+<dialog id="dlg-reto" aria-labelledby="h-reto">
+  <form class="dlg" data-accion="propone-reto" novalidate>
+    <h3 id="h-reto">Proponga su reto</h3>
+    <p class="intro">En pocas líneas. Le escribimos para afinarlo con usted.</p>
+    <div class="dos">
+      <div class="campo"><label for="r-empresa">Empresa</label><input id="r-empresa" name="empresa" required autocomplete="organization"></div>
+      <div class="campo"><label for="r-nombre">Su nombre</label><input id="r-nombre" name="nombre" required autocomplete="name"></div>
+    </div>
+    <div class="dos">
+      <div class="campo"><label for="r-cargo">Cargo</label><input id="r-cargo" name="cargo" autocomplete="organization-title"></div>
+      <div class="campo"><label for="r-correo">Correo</label><input id="r-correo" name="correo" type="email" required autocomplete="email"></div>
+    </div>
+    <div class="campo"><label for="r-reto">¿Qué reto le gustaría resolver?</label><textarea id="r-reto" name="reto" required placeholder="Ej.: queremos probar un nuevo canal para llegar a clientes jóvenes."></textarea></div>
+    <p class="estado" role="status"></p>
+    <div class="acciones"><button class="cerrar" type="button" data-cerrar>Cancelar</button><button class="btn btn-tinta" type="submit">Enviar reto</button></div>
+  </form>
+</dialog>
+
+<dialog id="dlg-agendar" aria-labelledby="h-agendar">
+  <form class="dlg" data-accion="agendar" novalidate>
+    <h3 id="h-agendar">Agendemos 20 minutos</h3>
+    <p class="intro">Le contamos cómo funciona y vemos si su empresa tiene retos para este semestre.</p>
+    <div class="dos">
+      <div class="campo"><label for="a-empresa">Empresa</label><input id="a-empresa" name="empresa" required autocomplete="organization"></div>
+      <div class="campo"><label for="a-nombre">Su nombre</label><input id="a-nombre" name="nombre" required autocomplete="name"></div>
+    </div>
+    <div class="dos">
+      <div class="campo"><label for="a-cargo">Cargo</label><input id="a-cargo" name="cargo" autocomplete="organization-title"></div>
+      <div class="campo"><label for="a-correo">Correo</label><input id="a-correo" name="correo" type="email" required autocomplete="email"></div>
+    </div>
+    <div class="campo"><label for="a-fecha">Fecha y hora que le sirve (opcional)</label><input id="a-fecha" name="fecha" type="datetime-local"></div>
+    <p class="estado" role="status"></p>
+    <div class="acciones"><button class="cerrar" type="button" data-cerrar>Cancelar</button><button class="btn btn-tinta" type="submit">Agendar</button></div>
+  </form>
+</dialog>
+
+<script>
+(function(){
+  // Precio de prueba del snippet: déjelo vacío para mostrar "A su medida".
+  var PRECIO_MENSUAL = "";   // ej. "$8.000.000"
+  var API = "https://script.google.com/macros/s/AKfycbyMtIoufDy2osThFdSVegiXOtbD3QIa15aEnqPC0pG9gqZPSk8s31mkdM6Xd6HVcE5O1Q/exec";
+  if (PRECIO_MENSUAL) {
+    document.getElementById("precio").innerHTML = PRECIO_MENSUAL + "<small>COP / mes</small>";
+    document.getElementById("precio-det").textContent = "Precio de lanzamiento por plan mensual. Lo ajustamos según cuántos retos necesite.";
+  }
+  var ref = "";
+  try { ref = new URLSearchParams(location.search).get("ref") || ""; } catch (e) {}
+
+  document.querySelectorAll("[data-abrir]").forEach(function (b) {
+    b.addEventListener("click", function () { var d = document.getElementById(b.dataset.abrir); d.showModal(); var i = d.querySelector("input"); if (i) i.focus(); });
+  });
+  document.querySelectorAll("[data-cerrar]").forEach(function (b) { b.addEventListener("click", function () { b.closest("dialog").close(); }); });
+  document.querySelectorAll("dialog").forEach(function (d) { d.addEventListener("click", function (e) { if (e.target === d) d.close(); }); });
+
+  document.querySelectorAll("form[data-accion]").forEach(function (f) {
+    f.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var est = f.querySelector(".estado");
+      est.className = "estado";
+      var faltan = Array.prototype.filter.call(f.querySelectorAll("[required]"), function (i) { return !i.value.trim(); });
+      var correo = f.querySelector("[type=email]");
+      if (faltan.length) { est.className = "estado err"; est.textContent = "Complete los campos marcados para continuar."; faltan[0].focus(); return; }
+      if (correo && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo.value.trim())) { est.className = "estado err"; est.textContent = "Revise el correo: parece incompleto."; correo.focus(); return; }
+      var datos = { tipo: "lead", accion: f.dataset.accion, ref: ref };
+      Array.prototype.forEach.call(f.elements, function (el) { if (el.name) datos[el.name] = el.value.trim(); });
+      var btn = f.querySelector("[type=submit]"); btn.disabled = true; est.textContent = "Enviando…";
+      fetch(API, { method: "POST", body: JSON.stringify(datos) })
+        .then(function (r) { return r.json(); })
+        .then(function (j) {
+          if (!j.ok) throw new Error();
+          var agendar = f.dataset.accion === "agendar";
+          f.innerHTML = '<div class="gracias"><div class="sel">✓</div><h3>' + (agendar ? "Listo, hablamos pronto" : "Recibimos su reto") + '</h3><p>' +
+            (agendar ? "Le escribimos en menos de un día hábil para confirmar la hora." : "Le escribimos en menos de un día hábil para afinarlo con usted.") +
+            '</p><button class="btn btn-tinta" type="button" style="margin-top:22px" data-cerrar>Cerrar</button></div>';
+          f.querySelector("[data-cerrar]").addEventListener("click", function () { f.closest("dialog").close(); });
+        })
+        .catch(function () { btn.disabled = false; est.className = "estado err"; est.textContent = "No se pudo enviar. Intente de nuevo en un momento."; });
+    });
+  });
+
+  // Aparición suave al hacer scroll (el contenido queda visible aunque no haya observer).
+  var els = document.querySelectorAll(".sube");
+  if (!("IntersectionObserver" in window)) { els.forEach(function (el) { el.classList.add("ver"); }); return; }
+  var io = new IntersectionObserver(function (es) { es.forEach(function (x) { if (x.isIntersecting) { x.target.classList.add("ver"); io.unobserve(x.target); } }); }, { threshold: .12 });
+  els.forEach(function (el) { io.observe(el); });
+  setTimeout(function () { els.forEach(function (el) { el.classList.add("ver"); }); }, 2500);
+})();
+</script>
+</body>
+</html>
