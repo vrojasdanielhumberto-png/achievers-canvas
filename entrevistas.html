@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Guía de entrevistas Achievers</title>
+<meta name="description" content="Guías de entrevista de 10 a 15 minutos al estilo Lean LaunchPad 2026 para cada tipo de persona del reto de Achievers Lab.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: reglas de la entrevista → estructura de 15 minutos → pestañas, una guía por tipo de persona → formato de registro. Pensada para leerse en el celular durante la entrevista. Solo modo claro. */
+:root{
+  color-scheme:light;
+  --bg:#F7F7FB; --card:#FFFFFF; --ink:#172033; --muted:#566079; --line:#DCE2EB; --soft:#F1F0F8;
+  --magenta:#B0156B; --violeta:#5B3DF5; --naranja:#C9650F; --verde:#23804D; --azul:#2563C9; --teal:#0F7C7A; --dna:#4A5568;
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:18px;line-height:1.5}
+.wrap{max-width:980px;margin:0 auto;padding-inline:20px;padding-block:24px 64px}
+h1,h2,h3{font-family:var(--f-display);margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1{font-size:clamp(32px,5vw,52px);font-weight:800;line-height:1.05}
+h2{font-size:clamp(24px,3vw,30px);font-weight:800;margin-top:36px}
+h3{font-size:19px;font-weight:800;margin-top:18px}
+p{margin:8px 0 0;max-width:72ch}
+a{color:var(--violeta);font-weight:700}
+.lab{font-family:var(--f-mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.volver{display:inline-block;margin-bottom:16px}
+.reglas{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px;margin-top:18px}
+.reglas div{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;font-size:16.5px}
+.reglas b{display:block;color:var(--magenta);font-family:var(--f-display);font-size:18px}
+.tiempo{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.tiempo span{background:var(--card);border:1.5px solid var(--magenta);border-radius:12px;padding:7px 12px;font-size:15.5px}
+.tiempo b{color:var(--magenta)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding-block:12px;z-index:3;margin-top:16px;border-bottom:1px solid var(--line)}
+.tabs button{font:700 15.5px var(--f-body);padding:9px 15px;border-radius:999px;border:2px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--c);border-color:var(--c);color:#fff}
+.tabs button:focus-visible{outline:3px solid var(--azul);outline-offset:2px}
+.guia{background:var(--card);border-radius:22px;border-top:7px solid var(--c);padding:20px 22px;margin-top:16px}
+.guia .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{font-family:var(--f-mono);font-size:12px;padding:4px 10px;border-radius:999px;border:1.5px solid var(--c);color:var(--c)}
+.bloque{margin-top:16px;border-left:4px solid var(--c);padding-left:14px}
+.bloque .lab{color:var(--c)}
+ol{margin:6px 0 0;padding-left:22px}
+li{margin:7px 0}
+li small{display:block;color:var(--muted);font-size:15px}
+.compromiso{margin-top:16px;background:color-mix(in srgb,var(--c) 9%,#fff);border-radius:14px;padding:12px 14px;font-size:17px}
+.registro{width:100%;border-collapse:collapse;background:var(--card);border-radius:16px;overflow:hidden;margin-top:12px;font-size:16px}
+.registro th,.registro td{border-bottom:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+.registro th{font-family:var(--f-mono);font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);background:var(--soft)}
+.tabla{overflow-x:auto}
+footer{margin-top:40px;font-size:15px;color:var(--muted)}
+@media (max-width:560px){body{font-size:17px}.wrap{padding-inline:16px}.guia{padding:16px}.tabs button{padding:8px 12px;font-size:14.5px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="volver" href="index.html">← Volver al canvas de Achievers</a>
+<div class="lab">Lean LaunchPad 2026 · descubrimiento de clientes</div>
+<h1>Guía de entrevistas</h1>
+<p>Una guía de 10 a 15 minutos por tipo de persona. La entrevista busca entender lo que la persona <b>hace hoy</b>, no lo que haría. Al final, con estudiantes y empresas, se muestra el snippet y se pide un compromiso.</p>
+
+<div class="reglas">
+  <div><b>Pregunta por el pasado</b>"Cuéntame la última vez que…", no "¿Usarías…?". Lo que alguien hizo vale más que lo que dice que haría.</div>
+  <div><b>No vendas antes de tiempo</b>Primero escucha el problema. El snippet va solo al final.</div>
+  <div><b>Pide permiso para grabar</b>Y toma una foto si la persona acepta. La clase pide citas y fotos.</div>
+  <div><b>Cierra con "¿a quién más?"</b>Cada entrevista debe dejar el nombre de otra persona para entrevistar.</div>
+</div>
+
+<h2>Estructura de 15 minutos</h2>
+<div class="tiempo">
+  <span><b>1 min</b> · Presentación y permiso</span>
+  <span><b>5 min</b> · Qué hace hoy</span>
+  <span><b>4 min</b> · Lo que le cuesta o le duele</span>
+  <span><b>3 min</b> · Snippet (solo estudiantes y empresas)</span>
+  <span><b>1 min</b> · Compromiso</span>
+  <span><b>1 min</b> · ¿A quién más?</span>
+</div>
+
+<div class="tabs" role="tablist" aria-label="Tipo de persona">
+  <button type="button" role="tab" id="t-est" aria-selected="true" data-g="est" style="--c:var(--violeta)">Estudiantes y profesionales</button>
+  <button type="button" role="tab" id="t-emp" aria-selected="false" data-g="emp" style="--c:var(--teal)">Empresas</button>
+  <button type="button" role="tab" id="t-tra" aria-selected="false" data-g="tra" style="--c:var(--naranja)">Personas que trabajan</button>
+  <button type="button" role="tab" id="t-ach" aria-selected="false" data-g="ach" style="--c:var(--dna)">Equipo Achievers</button>
+  <button type="button" role="tab" id="t-alu" aria-selected="false" data-g="alu" style="--c:var(--verde)">Estudiantes Achievers</button>
+</div>
+
+<section class="guia" id="g-est" style="--c:var(--violeta)">
+  <h2 style="margin-top:0">Estudiantes y profesionales que podrían inscribirse</h2>
+  <div class="meta"><span class="chip">H1 · pagarían</span><span class="chip">H3 · retos para ser contratados</span><span class="chip">H11 · 4 categorías</span><span class="chip">H12 · Coursera</span><span class="chip">Snippet 1</span></div>
+  <div class="bloque"><span class="lab">Qué hace hoy</span><ol>
+    <li>¿Qué estudias o en qué trabajas, y qué quieres hacer después?</li>
+    <li>Cuéntame la última vez que buscaste práctica o empleo. ¿Qué hiciste y qué pasó?</li>
+    <li>En el último año, ¿tomaste algún curso por fuera de la carrera? ¿Cuál, dónde lo encontraste, cuánto pagaste y lo terminaste? <small>Si menciona Coursera, pregunta si lo terminó y por qué.</small></li>
+    <li>¿Has trabajado alguna vez en un proyecto real con una empresa? ¿Cómo llegaste ahí?</li></ol></div>
+  <div class="bloque"><span class="lab">Lo que le cuesta</span><ol>
+    <li>¿Qué fue lo más difícil de conseguir esa práctica o ese empleo?</li>
+    <li>¿Qué hiciste para resolverlo? ¿Cuánto tiempo o plata te costó?</li></ol></div>
+  <div class="bloque"><span class="lab">Snippet 1 (alterna la versión A y la B)</span><ol>
+    <li>Muestra la página de la academia. "¿Qué te llama la atención? ¿Cuál elegirías y por qué?"</li>
+    <li>"Si costara esto, ¿la tomarías?" <small>Observa si duda con el precio; anota la reacción, no solo la respuesta.</small></li></ol></div>
+  <div class="compromiso"><b>Compromiso:</b> "¿Reservamos tu cupo ahora? Solo necesito tu correo y la categoría." Anota si dijo sí, qué categoría y si dejó el correo.</div>
+</section>
+
+<section class="guia" id="g-emp" style="--c:var(--teal)" hidden>
+  <h2 style="margin-top:0">Empresas: CEO, innovación o talento</h2>
+  <div class="meta"><span class="chip">H4 · pagan por retos</span><span class="chip">H8 · contratar talento</span><span class="chip">H13 · mensualidad</span><span class="chip">Snippet 2</span></div>
+  <div class="bloque"><span class="lab">Qué hace hoy</span><ol>
+    <li>Cuénteme el último reto de innovación que tuvo su empresa. ¿Cómo lo resolvieron, quién lo hizo, cuánto tardó y cuánto costó?</li>
+    <li>En el último año, ¿cuántos retos así tuvieron? ¿Cuántos quedaron sin resolver? <small>Clave para la mensualidad: si son pocos, la suscripción no se sostiene.</small></li>
+    <li>¿Cómo contratan hoy a profesionales jóvenes? ¿Qué les cuesta más?</li>
+    <li>¿Han trabajado con universidades o con estudiantes? ¿Qué funcionó y qué no?</li></ol></div>
+  <div class="bloque"><span class="lab">Lo que le cuesta</span><ol>
+    <li>¿Qué pasa con los retos que no se resuelven? ¿Cuánto le cuesta eso a la empresa?</li>
+    <li>¿Quién decide y quién aprueba el presupuesto para algo así?</li></ol></div>
+  <div class="bloque"><span class="lab">Snippet 2</span><ol>
+    <li>Muestra el one-pager del JAM de innovación continua. "¿Qué le parece? ¿Qué le sobra o le falta?"</li>
+    <li>"¿Preferiría pagar por reto o una mensualidad por varios retos?"</li></ol></div>
+  <div class="compromiso"><b>Compromiso:</b> "¿Agendamos 20 minutos el jueves para que nos cuente un reto?" o "¿Quiere proponerlo ya?". Anota si agendó, si propuso un reto y quién más debería estar.</div>
+</section>
+
+<section class="guia" id="g-tra" style="--c:var(--naranja)" hidden>
+  <h2 style="margin-top:0">Personas que trabajan</h2>
+  <div class="meta"><span class="chip">H5 · aprender el método en retos</span></div>
+  <div class="bloque"><span class="lab">Qué hace hoy</span><ol>
+    <li>¿En qué trabajas y qué haces en un día normal?</li>
+    <li>Cuéntame la última vez que en tu trabajo te pidieron proponer o mejorar algo. ¿Qué hiciste?</li>
+    <li>¿Qué aprendiste en el último año para tu trabajo? ¿Cómo, cuánto tiempo y quién pagó?</li></ol></div>
+  <div class="bloque"><span class="lab">Lo que le cuesta</span><ol>
+    <li>¿Qué te frena para innovar en tu trabajo: tiempo, método, permisos, apoyo?</li>
+    <li>Si tuvieras que resolver un problema real de tu trabajo con un equipo de estudiantes, ¿qué tendría que pasar para que valga la pena?</li></ol></div>
+  <div class="compromiso"><b>Sin snippet.</b> Cierra con: "¿A quién de tu empresa o de tu sector debería entrevistar?"</div>
+</section>
+
+<section class="guia" id="g-ach" style="--c:var(--dna)" hidden>
+  <h2 style="margin-top:0">Equipo y seniors de Achievers</h2>
+  <div class="meta"><span class="chip">H9 · operar la academia</span><span class="chip">H6 · redes y podcast</span></div>
+  <div class="bloque"><span class="lab">Qué hace hoy</span><ol>
+    <li>¿Cuál es tu rol y qué hiciste esta semana para Achievers?</li>
+    <li>Cuéntame cómo llegó la última empresa al JAM Lite. ¿Quién la contactó y cuánto tardó en decidir?</li>
+    <li>¿Qué parte del proceso te quita más tiempo?</li></ol></div>
+  <div class="bloque"><span class="lab">Sobre el canvas soñado</span><ol>
+    <li>¿Qué te parece la academia por categorías? ¿Qué haría falta para lanzarla?</li>
+    <li>¿Qué cambiarías de Achievers y qué no se debe tocar?</li></ol></div>
+  <div class="compromiso"><b>Sin snippet.</b> Cierra con: "¿Qué empresa o persona deberíamos entrevistar primero?"</div>
+</section>
+
+<section class="guia" id="g-alu" style="--c:var(--verde)" hidden>
+  <h2 style="margin-top:0">Estudiantes actuales y pasados de Achievers</h2>
+  <div class="meta"><span class="chip">H10 · por qué entran y se quedan</span><span class="chip">H3 · seguir en retos</span></div>
+  <div class="bloque"><span class="lab">Qué hizo</span><ol>
+    <li>¿Por qué inscribiste la materia? ¿Qué esperabas?</li>
+    <li>Cuéntame el momento en que cambió tu percepción de la materia. ¿Qué pasó?</li>
+    <li>¿Qué hiciste con lo que aprendiste después de la materia? ¿Te sirvió para algo concreto?</li></ol></div>
+  <div class="bloque"><span class="lab">Lo que le costó</span><ol>
+    <li>¿Qué fue lo más difícil de la materia o del reto con la empresa?</li>
+    <li>Si pudieras seguir trabajando en retos con empresas, ¿lo harías? ¿Qué tendría que tener?</li></ol></div>
+  <div class="compromiso"><b>Sin snippet.</b> Cierra con: "¿A qué compañero o compañera debería entrevistar?"</div>
+</section>
+
+<h2>Cómo se registra cada entrevista</h2>
+<p>Una fila por entrevista, en el formato de Lean LaunchPad. Con las primeras 10 se crean los 5 personajes de IA.</p>
+<div class="tabla"><table class="registro">
+  <thead><tr><th>Campo</th><th>Ejemplo</th></tr></thead>
+  <tbody>
+    <tr><td>Persona y tipo</td><td>Estudiante de 7.º semestre de Administración</td></tr>
+    <tr><td>Hipótesis</td><td>H11 · Con 4 categorías más personas reservan</td></tr>
+    <tr><td>Experimento</td><td>Entrevista de 15 min + snippet 1, versión A</td></tr>
+    <tr><td>Resultado esperado</td><td>Reserva un cupo en alguna categoría</td></tr>
+    <tr><td>Resultado real</td><td>Eligió la categoría 2, dudó con el precio, dejó el correo</td></tr>
+    <tr><td>Cita textual</td><td>"Pagaría si me garantizan contacto con empresas"</td></tr>
+    <tr><td>Siguiente paso</td><td>Probar un precio más bajo para la categoría 2</td></tr>
+  </tbody></table></div>
+
+<footer>Proyecto de grado en Ingeniería Industrial con Achievers Lab, 2026-20. Basado en Lean LaunchPad 2026 (Steve Blank) e Innovator's DNA (preguntar y observar).</footer>
+</div>
+<script>
+(function(){
+  var bs=document.querySelectorAll('.tabs button');
+  function ver(g){
+    bs.forEach(function(b){b.setAttribute('aria-selected',b.dataset.g===g?'true':'false');});
+    document.querySelectorAll('.guia').forEach(function(s){s.hidden = s.id!=='g-'+g;});
+    try{localStorage.setItem('guia',g);}catch(e){}
+  }
+  bs.forEach(function(b){b.addEventListener('click',function(){ver(b.dataset.g);});});
+  try{var g=localStorage.getItem('guia'); if(g&&document.getElementById('g-'+g)) ver(g);}catch(e){}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Snippets Achievers Lab</title>
+<meta name="description" content="Los 2 MVPs del reto como IUP snippets de Lean LaunchPad 2026: de qué parte del canvas salen, qué hipótesis prueban y cómo se miden.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: explicación corta → una ficha por snippet (canvas, hipótesis, formato Lean LaunchPad) con su vista previa al lado → cómo se usan en las entrevistas. Solo modo claro. */
+:root{
+  color-scheme:light;
+  --bg:#F7F7FB; --card:#FFFFFF; --ink:#172033; --muted:#566079; --line:#DCE2EB; --soft:#F1F0F8;
+  --magenta:#B0156B; --violeta:#5B3DF5; --naranja:#C9650F; --verde:#23804D; --azul:#2563C9; --teal:#0F7C7A;
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:18px;line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:24px 64px}
+h1,h2,h3{font-family:var(--f-display);margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1{font-size:clamp(34px,5.5vw,56px);font-weight:800;line-height:1.04}
+h2{font-size:clamp(26px,3.2vw,34px);font-weight:800}
+h3{font-size:20px;font-weight:800}
+p{margin:8px 0 0;max-width:72ch}
+a{color:var(--violeta);font-weight:700}
+.lab{font-family:var(--f-mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.volver{display:inline-block;margin-bottom:16px}
+.estado{display:inline-flex;gap:8px;align-items:center;margin-top:16px;background:#FFF6E0;border:2px solid #D69E2E;border-radius:999px;padding:8px 16px;font-weight:700;font-size:16px}
+.que{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px;margin-top:20px}
+.que div{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px}
+.que b{display:block;font-family:var(--f-display);font-size:19px;color:var(--magenta)}
+.snip{margin-top:40px;background:var(--card);border-radius:26px;border:1px solid var(--line);overflow:hidden}
+.snip .top{padding:22px 24px;border-bottom:1px solid var(--line);display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:color-mix(in srgb,var(--c) 7%,#fff)}
+.snip .num{width:52px;height:52px;border-radius:16px;background:var(--c);color:#fff;font-family:var(--f-display);font-weight:800;font-size:24px;display:flex;align-items:center;justify-content:center;flex:none}
+.snip .cuerpo{display:grid;grid-template-columns:1.15fr 1fr;gap:0}
+.ficha{padding:22px 24px;min-width:0}
+.vista{padding:22px 24px;background:var(--soft);border-left:1px solid var(--line);min-width:0}
+.dato{margin-top:14px}
+.dato .lab{color:var(--c)}
+.dato p{margin-top:2px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{font-family:var(--f-mono);font-size:12px;padding:4px 10px;border-radius:999px;border:1.5px solid var(--c);color:var(--c);background:#fff}
+.formato{margin-top:18px;border:2px solid var(--c);border-radius:16px;overflow:hidden}
+.formato .fila{display:grid;grid-template-columns:170px 1fr;border-top:1px solid var(--line)}
+.formato .fila:first-child{border-top:0}
+.formato .k{padding:10px 12px;background:color-mix(in srgb,var(--c) 9%,#fff);font-weight:700;font-size:15.5px}
+.formato .v{padding:10px 12px;font-size:16px}
+.pend{color:var(--muted);font-style:italic}
+.btn{display:inline-block;margin-top:16px;padding:12px 20px;border-radius:999px;font-weight:700;text-decoration:none;border:0;font:700 16px var(--f-body);cursor:not-allowed;background:#E6E3F0;color:#7A7690}
+/* vistas previas */
+.mock{background:#fff;border-radius:16px;box-shadow:0 10px 28px rgba(23,32,51,.12);overflow:hidden;font-size:14.5px}
+.mock .barra{display:flex;gap:6px;align-items:center;padding:8px 10px;background:#ECEAF3}
+.mock .barra i{width:9px;height:9px;border-radius:50%;background:#C9C5D8}
+.mock .barra span{margin-left:8px;font-family:var(--f-mono);font-size:11px;color:#8A86A0}
+.mock .in{padding:16px}
+.mock h4{font-family:var(--f-display);font-size:20px;margin:0 0 4px;line-height:1.15}
+.cats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.cat{border:1.5px solid var(--line);border-radius:12px;padding:8px}
+.cat b{display:block;font-size:13.5px}
+.cat small{color:var(--muted);font-size:12px}
+.cat .p{font-family:var(--f-mono);font-size:12px;color:var(--violeta);margin-top:4px}
+.mbtn{display:inline-block;margin-top:10px;padding:8px 14px;border-radius:999px;background:var(--c);color:#fff;font-weight:700;font-size:13.5px}
+.mbtn.sec{background:#fff;color:var(--c);border:1.5px solid var(--c);margin-left:6px}
+.ab{display:flex;gap:6px;margin-bottom:8px}
+.ab span{font-family:var(--f-mono);font-size:11px;padding:3px 8px;border-radius:6px;background:var(--ink);color:#fff}
+.ab span.off{background:#C9C5D8}
+.nota{font-size:15px;color:var(--muted);margin-top:10px}
+.pasos{counter-reset:p;list-style:none;padding:0;margin:16px 0 0;display:grid;gap:10px}
+.pasos li{counter-increment:p;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px 14px 60px;position:relative}
+.pasos li::before{content:counter(p);position:absolute;left:14px;top:12px;width:32px;height:32px;border-radius:10px;background:var(--magenta);color:#fff;font-family:var(--f-display);font-weight:800;display:flex;align-items:center;justify-content:center}
+footer{margin-top:44px;font-size:15px;color:var(--muted)}
+@media (max-width:860px){
+  .snip .cuerpo{grid-template-columns:1fr}
+  .vista{border-left:0;border-top:1px solid var(--line)}
+}
+@media (max-width:560px){
+  body{font-size:17px}
+  .wrap{padding-inline:16px}
+  .formato .fila{grid-template-columns:1fr}
+  .formato .k{padding-bottom:4px}
+  .ficha,.vista,.snip .top{padding:18px 16px}
+  .cats{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="volver" href="index.html">← Volver al canvas de Achievers</a>
+<div class="lab">Lean LaunchPad 2026 · MVPs del reto</div>
+<h1>Snippets Achievers Lab</h1>
+<p>Con Lean LaunchPad no construimos un producto completo: cada MVP es un <b>snippet</b>, una pieza pequeña del producto soñado que prueba <b>una sola hipótesis</b> del canvas y pide un <b>compromiso real</b> (tiempo, datos o dinero). Lo que medimos es lo que la gente <i>hace</i>, no lo que dice.</p>
+<span class="estado">Diseñados · se muestran en las entrevistas desde el 14 de octubre</span>
+
+<div class="que">
+  <div><b>De dónde salen</b>Del canvas soñado de Achievers: la academia por categorías y el JAM de innovación continua.</div>
+  <div><b>Cómo se registran</b>Hipótesis → experimento → resultado esperado → resultado real → siguiente paso.</div>
+  <div><b>Cuándo se lanzan</b>Primero 10 entrevistas reales; los snippets se muestran al final de cada entrevista.</div>
+</div>
+
+<!-- SNIPPET 1 -->
+<section class="snip" style="--c:var(--violeta)" aria-labelledby="s1">
+  <div class="top"><span class="num">1</span><div><div class="lab">Lado estudiantes y profesionales</div><h2 id="s1">Preinscripción a la academia de innovación</h2></div></div>
+  <div class="cuerpo">
+    <div class="ficha">
+      <div class="dato"><span class="lab">Área del canvas</span><div class="chips"><span class="chip">Propuesta de valor</span><span class="chip">Fuentes de ingreso</span><span class="chip">Canales</span><span class="chip">Reto 1 y reto 2</span></div></div>
+      <div class="dato"><span class="lab">De dónde sale la hipótesis</span><p>De la idea de Luis Carlos Sanabria: una academia con 4 categorías (100 % virtual, virtual con monitoría, presencial, y programa completo con retos con empresas). Su supuesto es que más categorías abren la puerta a más personas.</p></div>
+      <div class="formato">
+        <div class="fila"><div class="k">Hipótesis</div><div class="v">H11 · Con 4 categorías más personas reservan un cupo que con una sola, y el ingreso esperado por visitante es mayor.</div></div>
+        <div class="fila"><div class="k">Experimento</div><div class="v">Prueba A/B. Versión A: landing con las 4 categorías y su precio. Versión B: landing solo con la categoría 4. Al final de cada entrevista se muestra una de las dos (se alternan) y se pide: <b>"¿Reservamos tu cupo?"</b> (correo y categoría).</div></div>
+        <div class="fila"><div class="k">Métrica</div><div class="v">% que reserva en cada versión, categoría elegida e ingreso esperado por visitante (precio de la categoría × reservas ÷ personas que la vieron).</div></div>
+        <div class="fila"><div class="k">Resultado esperado</div><div class="v">Propuesta para que el grupo la confirme antes de lanzar: al menos 3 de cada 10 personas reservan, y la versión A deja más ingreso esperado que la B.</div></div>
+        <div class="fila"><div class="k">Resultado real</div><div class="v pend">Pendiente: se llena después de las entrevistas.</div></div>
+        <div class="fila"><div class="k">Siguiente paso</div><div class="v pend">Pendiente: seguir, ajustar precios o categorías, o pivotar.</div></div>
+      </div>
+      <button class="btn" type="button" disabled>Abrir el snippet · disponible después de las entrevistas</button>
+    </div>
+    <div class="vista">
+      <span class="lab">Vista previa del snippet</span>
+      <div class="ab" style="margin-top:8px"><span>Versión A · 4 categorías</span><span class="off">Versión B · solo categoría 4</span></div>
+      <div class="mock" style="--c:var(--violeta)">
+        <div class="barra"><i></i><i></i><i></i><span>academia de innovación</span></div>
+        <div class="in">
+          <h4>Aprende a innovar con retos reales</h4>
+          <div style="color:var(--muted)">Elige cómo tomar el curso</div>
+          <div class="cats">
+            <div class="cat"><b>1 · 100 % virtual</b><small>Videos pregrabados y quizzes</small><div class="p">$ precio por definir</div></div>
+            <div class="cat"><b>2 · Virtual con monitoría</b><small>Monitoría semanal en vivo</small><div class="p">$$ precio por definir</div></div>
+            <div class="cat"><b>3 · Presencial</b><small>Clase en vivo</small><div class="p">$$$ precio por definir</div></div>
+            <div class="cat"><b>4 · Retos con empresas</b><small>Las empresas te ven trabajar</small><div class="p">$$$$ precio por definir</div></div>
+          </div>
+          <span class="mbtn">Reservar mi cupo</span>
+        </div>
+      </div>
+      <p class="nota">Los precios salen de la encuesta F1 y de las entrevistas. La categoría 1 se ofrecería también en Coursera; probar cuál plataforma retiene más queda para más adelante (H12).</p>
+    </div>
+  </div>
+</section>
+
+<!-- SNIPPET 2 -->
+<section class="snip" style="--c:var(--teal)" aria-labelledby="s2">
+  <div class="top"><span class="num">2</span><div><div class="lab">Lado empresas</div><h2 id="s2">JAM de innovación continua</h2></div></div>
+  <div class="cuerpo">
+    <div class="ficha">
+      <div class="dato"><span class="lab">Área del canvas</span><div class="chips"><span class="chip">Propuesta de valor</span><span class="chip">Fuentes de ingreso</span><span class="chip">Relaciones</span><span class="chip">Reto 2</span></div></div>
+      <div class="dato"><span class="lab">De dónde sale la hipótesis</span><p>Del canvas soñado. Ya sabemos que las empresas compran el JAM Lite por reto. La pregunta nueva es si pagarían una <b>mensualidad</b> por proponer retos todo el semestre, que los estudiantes de la clase y de la academia van resolviendo.</p></div>
+      <div class="formato">
+        <div class="fila"><div class="k">Hipótesis</div><div class="v">H13 · Las empresas tienen retos durante todo el año y pagarían una mensualidad por proponerlos de forma continua, y además la usarían para conocer talento.</div></div>
+        <div class="fila"><div class="k">Experimento</div><div class="v">Al final de la entrevista se muestra un one-pager del JAM de innovación continua (qué incluye, cuántos retos por mes y cómo ve trabajar a los estudiantes) con dos botones: <b>"Agendar 20 minutos"</b> y <b>"Propóngalo ya"</b>, que lleva a una página para escribir el reto.</div></div>
+        <div class="fila"><div class="k">Métrica</div><div class="v">Empresas que agendan la reunión o proponen un reto (compromiso de tiempo y datos). Antes del snippet se pregunta cuántos retos tuvo la empresa el último año y cuántos quedaron sin resolver.</div></div>
+        <div class="fila"><div class="k">Resultado esperado</div><div class="v">Propuesta para que el grupo la confirme: al menos 3 de cada 10 empresas agendan o proponen un reto, y la mayoría tuvo más de 3 retos el último año.</div></div>
+        <div class="fila"><div class="k">Resultado real</div><div class="v pend">Pendiente: se llena después de las entrevistas.</div></div>
+        <div class="fila"><div class="k">Siguiente paso</div><div class="v pend">Pendiente: las que se comprometen pasan a ser candidatas a design partner.</div></div>
+      </div>
+      <button class="btn" type="button" disabled>Abrir el snippet · disponible después de las entrevistas</button>
+    </div>
+    <div class="vista">
+      <span class="lab">Vista previa del snippet</span>
+      <div class="mock" style="--c:var(--teal);margin-top:8px">
+        <div class="barra"><i></i><i></i><i></i><span>jam de innovación continua</span></div>
+        <div class="in">
+          <h4>Sus retos de innovación, resueltos todo el semestre</h4>
+          <div style="color:var(--muted)">Usted propone retos cada mes; equipos de estudiantes con mentores los resuelven con métodos probados. Y conoce a los mejores antes de contratarlos.</div>
+          <div class="cats">
+            <div class="cat"><b>Plan mensual</b><small>X retos al mes</small><div class="p">$ por definir</div></div>
+            <div class="cat"><b>Incluye</b><small>Avances, resultado final y perfiles destacados</small></div>
+          </div>
+          <span class="mbtn">Agendar 20 minutos</span><span class="mbtn sec">Propóngalo ya</span>
+        </div>
+      </div>
+      <p class="nota">"Propóngalo ya" llevará a una página corta: empresa, el reto en pocas líneas y correo. Las respuestas llegan a la hoja del equipo.</p>
+    </div>
+  </div>
+</section>
+
+<h2 style="margin-top:44px">Cómo se usan en las entrevistas</h2>
+<ol class="pasos">
+  <li><b>10 minutos sobre lo que la persona hace hoy:</b> cómo busca empleo o cursos y cuánto ha pagado (estudiantes); cuántos retos tuvo el último año, cómo los resolvió y cómo contrata talento (empresas).</li>
+  <li><b>Se muestra el snippet que le corresponde.</b> En el snippet 1 se alterna la versión A y la B entre entrevistas.</li>
+  <li><b>Se pide el compromiso:</b> "¿Reservamos tu cupo?" o "¿Agendamos el jueves?".</li>
+  <li><b>Se registra</b> en el formato hipótesis → experimento → esperado → real → siguiente paso, con una cita textual y una foto.</li>
+</ol>
+
+<footer>Proyecto de grado en Ingeniería Industrial con Achievers Lab, 2026-20. Los precios y los resultados esperados son propuestas por confirmar con el grupo.</footer>
+</div>
+</body>
+</html>
