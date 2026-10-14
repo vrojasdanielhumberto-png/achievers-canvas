@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bitácora Tesis Achievers</title>
+<meta name="description" content="Bitácora semanal de la tesis con Achievers Lab: lo que hicimos, los pasos a seguir y qué cambia la próxima semana.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Una tarjeta por semana, la más reciente arriba. Cada tarjeta tiene 4 cajas que se escriben directo y se guardan en la hoja de Google. */
+:root{
+  color-scheme:light;
+  --bg:#F6F5F1; --card:#FFFFFF; --ink:#172033; --muted:#5A6478; --line:#DFE2E8;
+  --magenta:#B0156B; --verde:#23804D; --azul:#2563C9; --oro:#B7791F;
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:19px;line-height:1.55}
+.wrap{max-width:860px;margin:0 auto;padding:28px 20px 72px}
+h1,h2{font-family:var(--f-display);font-weight:800;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(34px,6vw,50px);line-height:1.05}
+h2{font-size:28px}
+.sub{color:var(--muted);margin:10px 0 0}
+.barra{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:22px 0 8px}
+input[type=text]{font:inherit;font-size:17px;padding:10px 14px;border:2px solid var(--line);border-radius:12px;background:#fff;min-width:0;width:230px}
+button{font:inherit;font-weight:700;font-size:17px;border:0;border-radius:12px;padding:11px 18px;cursor:pointer;background:var(--ink);color:#fff}
+button.sec{background:#fff;color:var(--ink);border:2px solid var(--line)}
+button:disabled{opacity:.5;cursor:default}
+.aviso{font-size:16px;color:var(--muted);min-height:24px}
+.semana{background:var(--card);border-radius:22px;padding:24px;margin-top:22px;border:1px solid var(--line)}
+.cab{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 16px;align-items:baseline}
+.meta{font-size:15px;color:var(--muted)}
+.caja{margin-top:18px}
+.caja label{display:block;font-weight:700;font-size:18px;color:var(--c)}
+.caja label::before{content:"";display:inline-block;width:12px;height:12px;border-radius:4px;background:var(--c);margin-right:8px}
+textarea{display:block;width:100%;margin-top:6px;font:inherit;font-size:18px;line-height:1.55;color:var(--ink);background:#FAFAF8;border:2px solid transparent;border-radius:14px;padding:12px 14px;resize:none;overflow:hidden;min-height:64px}
+textarea:hover{border-color:var(--line)}
+textarea:focus{outline:none;border-color:var(--azul);background:#fff}
+textarea::placeholder{color:#9AA1AE}
+.pie{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin-top:16px}
+.pie .aviso{flex:1}
+.links{margin-top:40px;font-size:16px;color:var(--muted)}
+.links a{color:var(--azul);font-weight:700;margin-right:14px;white-space:nowrap}
+@media (max-width:600px){
+  body{font-size:18px}
+  .wrap{padding-inline:16px}
+  .semana{padding:18px 16px}
+  input[type=text]{width:100%}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Bitácora de la tesis con Achievers Lab</h1>
+  <p class="sub">Qué hicimos cada semana, qué sigue y qué cambia. Cualquiera del equipo puede escribir aquí: toca una caja, escribe y guarda.</p>
+
+  <div class="barra">
+    <input type="text" id="autor" placeholder="Tu nombre" aria-label="Tu nombre" maxlength="80">
+    <button class="sec" id="nueva">+ Nueva semana</button>
+  </div>
+  <div class="aviso" id="estado">Cargando…</div>
+
+  <div id="semanas"></div>
+
+  <p class="links">Ver también:
+    <a href="index.html">Canvas</a>
+    <a href="snippets.html">Snippets</a>
+    <a href="jam-continuo.html">JAM continuo</a>
+    <a href="entrevistas.html">Entrevistas</a>
+    <a href="metodos.html">Métodos</a>
+  </p>
+</div>
+
+<script>
+var API = "https://script.google.com/macros/s/AKfycbyMtIoufDy2osThFdSVegiXOtbD3QIa15aEnqPC0pG9gqZPSk8s31mkdM6Xd6HVcE5O1Q/exec";
+var CAJAS = [
+  {k:"hicimos", t:"Lo que hicimos", c:"var(--verde)", ph:"Lo que logramos esta semana…"},
+  {k:"pasos", t:"Pasos a seguir", c:"var(--magenta)", ph:"Lo que vamos a hacer…"},
+  {k:"cambios", t:"Qué cambia la próxima semana", c:"var(--azul)", ph:"Qué hacemos distinto y por qué…"},
+  {k:"mentora", t:"Notas de la mentora", c:"var(--oro)", ph:"Comentarios, preguntas o sugerencias…"}
+];
+// Primera semana, por si la hoja todavía no tiene nada.
+var INICIAL = [{
+  semana:"2026-10-13",
+  hicimos:"• Canvas de Achievers: el de hoy (JAM Lite) y el soñado (academia de innovación y JAM continuo), con 14 hipótesis por probar.\n• 5 encuestas, una por tipo de cliente. Ya hay respuestas de estudiantes, personas que trabajan, empresas y estudiantes de Achievers.\n• Entrevistas con el CEO y el equipo senior de Achievers: 7 insights, 4 buyer personas y 7 problemas.\n• Un colegio aceptó un piloto de la academia para sus estudiantes de 10.° y 11.°.\n• Las dos propuestas de tesis en la plantilla oficial.",
+  pasos:"• Más entrevistas reales con empresas y estudiantes.\n• Construir el snippet 1: los videos del equipo convertidos en publicaciones para cada red.\n• Acordar con el colegio el precio y la plataforma del piloto.\n• Revisar las propuestas con el asesor.",
+  cambios:"Pasamos de diseñar a probar con clientes reales. Cada entrevista se registra como hipótesis → experimento → resultado esperado → resultado real → siguiente paso (Lean LaunchPad). El colegio sería nuestro primer design partner.",
+  mentora:"", autor:"", t:""
+}];
+var datos = [];
+try { document.getElementById("autor").value = localStorage.getItem("bitacora_autor") || ""; } catch(e) {}
+
+function lunes(d){ d = new Date(d); d.setDate(d.getDate() - (d.getDay()+6)%7); return d; }
+function iso(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function titulo(s){
+  var a = new Date(s+"T12:00:00"), b = new Date(a); b.setDate(b.getDate()+4);
+  var m = function(d){ return d.toLocaleDateString("es-CO",{month:"long"}); };
+  return "Semana del " + a.getDate() + (m(a)===m(b) ? "" : " de " + m(a)) + " al " + b.getDate() + " de " + m(b);
+}
+function crecer(t){ t.style.height = "auto"; t.style.height = t.scrollHeight + "px"; }
+function aviso(id, txt){ var e = document.getElementById(id); if (e) e.textContent = txt; }
+
+function pintar(){
+  var cont = document.getElementById("semanas"); cont.innerHTML = "";
+  datos.sort(function(a,b){ return a.semana < b.semana ? 1 : -1; });
+  datos.forEach(function(s){
+    var art = document.createElement("article"); art.className = "semana";
+    var cab = document.createElement("div"); cab.className = "cab";
+    var h = document.createElement("h2"); h.textContent = titulo(s.semana);
+    var meta = document.createElement("span"); meta.className = "meta";
+    meta.textContent = s.t ? "Guardado " + s.t + (s.autor ? " · " + s.autor : "") : "Sin guardar";
+    cab.append(h, meta); art.append(cab);
+    CAJAS.forEach(function(c){
+      var d = document.createElement("div"); d.className = "caja"; d.style.setProperty("--c", c.c);
+      var id = "t_" + s.semana + "_" + c.k;
+      var l = document.createElement("label"); l.htmlFor = id; l.textContent = c.t;
+      var t = document.createElement("textarea"); t.id = id; t.value = s[c.k] || ""; t.placeholder = c.ph;
+      t.addEventListener("input", function(){ s[c.k] = t.value; crecer(t); s.sucio = true; aviso("a_"+s.semana, "Cambios sin guardar"); });
+      d.append(l, t); art.append(d);
+      requestAnimationFrame(function(){ crecer(t); });
+    });
+    var pie = document.createElement("div"); pie.className = "pie";
+    var av = document.createElement("span"); av.className = "aviso"; av.id = "a_" + s.semana;
+    var b = document.createElement("button"); b.textContent = "Guardar";
+    b.addEventListener("click", function(){ guardar(s, b); });
+    pie.append(av, b); art.append(pie);
+    cont.append(art);
+  });
+}
+
+function guardar(s, b){
+  var autor = document.getElementById("autor").value.trim();
+  if (!autor) { aviso("a_"+s.semana, "Escribe tu nombre arriba antes de guardar"); document.getElementById("autor").focus(); return; }
+  try { localStorage.setItem("bitacora_autor", autor); } catch(e) {}
+  b.disabled = true; aviso("a_"+s.semana, "Guardando…");
+  fetch(API, {method:"POST", body: JSON.stringify({tipo:"bitacora", semana:s.semana, hicimos:s.hicimos, pasos:s.pasos, cambios:s.cambios, mentora:s.mentora, autor:autor})})
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      if (!j.ok) throw new Error(j.error || "error");
+      s.t = j.t; s.autor = autor; s.sucio = false; pintar(); aviso("a_"+s.semana, "✓ Guardado");
+    })
+    .catch(function(){ b.disabled = false; aviso("a_"+s.semana, "No se pudo guardar. Revisa la conexión e intenta otra vez."); });
+}
+
+// "+ Nueva semana": agrega la semana siguiente a la última (o la actual) y copia los pasos a seguir como punto de partida.
+document.getElementById("nueva").addEventListener("click", function(){
+  var sig = datos.length ? new Date(datos[0].semana+"T12:00:00") : lunes(new Date());
+  if (datos.length) sig.setDate(sig.getDate()+7);
+  var s = iso(sig);
+  var ant = datos[0];
+  datos.push({semana:s, hicimos: ant && ant.pasos ? "Pasos que dejamos la semana pasada:\n" + ant.pasos : "", pasos:"", cambios:"", mentora:"", autor:"", t:"", sucio:true});
+  pintar();
+  document.getElementById("t_"+s+"_hicimos").focus();
+});
+
+window.addEventListener("beforeunload", function(e){ if (datos.some(function(s){ return s.sucio; })) { e.preventDefault(); e.returnValue = ""; } });
+
+fetch(API + "?b=bitacora", {cache:"no-store"})
+  .then(function(r){ return r.json(); })
+  .then(function(j){
+    if (!j.ok) throw new Error();
+    datos = j.semanas.length ? j.semanas : INICIAL;
+    aviso("estado", "");
+    pintar();
+  })
+  .catch(function(){
+    datos = INICIAL; pintar();
+    aviso("estado", "No se pudo conectar con la hoja. Puedes leer, pero guardar puede fallar.");
+  });
+</script>
+</body>
+</html>
